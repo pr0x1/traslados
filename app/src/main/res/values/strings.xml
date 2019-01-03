@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Traslados Rollos</string>
+    <string name="alm_origen">Almacén Origen</string>
+    <string name="cent_dest">Centro Destino</string>
+    <string name="alm_dest">Almcén Destino</string>
+    <string name="transportadora">Empresa Transportadora</string>
+    <string name="placa">Placa</string>
+    <string name="title_activity_lectura">LecturaActivity</string>
+
+
+</resources>
