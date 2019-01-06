@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LecturaActivity extends AppCompatActivity {
 
@@ -49,7 +51,7 @@ public class LecturaActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mSectionsPagerAdapter.);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -88,6 +90,21 @@ public class LecturaActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * Creates the fragments and sets it to ViewPager
+     */
+    private void populateViewPager() {
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabDetails tab;
+        tab = new TabDetails("Lectura", PlaceholderFragment.newInstance(R.layout.fragment_lector));
+        mSectionsPagerAdapter.addFragment(tab);
+        tab = new TabDetails("Traslado", PlaceholderFragment.newInstance(R.layout.fragment_envio));
+        mSectionsPagerAdapter.addFragment(tab);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     /**
@@ -130,6 +147,7 @@ public class LecturaActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private final List<TabDetails> tabs = new ArrayList<>();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -146,6 +164,14 @@ public class LecturaActivity extends AppCompatActivity {
         public int getCount() {
             // Show 3 total pages.
             return 3;
+        }
+        private void addFragment(TabDetails tab) {
+            tabs.add(tab);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabs.get(position).getTabName();
         }
     }
 }
