@@ -1,6 +1,5 @@
 package com.a4app.develop.traslados;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -73,7 +72,7 @@ public class EnvioFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
+/*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -83,13 +82,15 @@ public class EnvioFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
+    }*/
 
+/*
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+*/
 
     /**
      * This interface must be implemented by activities that contain this

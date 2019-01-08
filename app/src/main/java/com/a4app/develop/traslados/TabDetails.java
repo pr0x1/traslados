@@ -2,11 +2,12 @@ package com.a4app.develop.traslados;
 
 public class TabDetails {
     private String tabName;
-    private LecturaActivity.PlaceholderFragment fragment;
+    private android.support.v4.app.Fragment fragment;
 
-    public TabDetails(String tabName, LecturaActivity.PlaceholderFragment fragment) {
+    public TabDetails(String tabName, android.support.v4.app.Fragment fragment) {
         this.tabName = tabName;
         this.fragment = fragment;
+
     }
 
     public String getTabName() {
@@ -17,11 +18,11 @@ public class TabDetails {
         this.tabName = tabName;
     }
 
-    public LecturaActivity.PlaceholderFragment getFragment() {
+    public android.support.v4.app.Fragment getFragment() {
         return fragment;
     }
 
-    public void setFragment(LecturaActivity.PlaceholderFragment fragment) {
+    public void setFragment(android.support.v4.app.Fragment fragment) {
         this.fragment = fragment;
     }
 
