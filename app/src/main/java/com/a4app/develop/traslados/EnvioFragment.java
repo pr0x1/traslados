@@ -1,11 +1,18 @@
 package com.a4app.develop.traslados;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.a4app.develop.traslados.modelo.Lote;
 
 
 /**
@@ -21,6 +28,8 @@ public class EnvioFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private TableLayout tableLayout;
+    private View vista;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -63,7 +72,10 @@ public class EnvioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_envio, container, false);
+        vista = inflater.inflate(R.layout.fragment_envio, container, false);
+        tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
+
+        return vista;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,5 +117,56 @@ public class EnvioFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public void PasaLote(Lote lote){
+        Lote a = lote;
+        populateTable(lote);
+
+    }
+
+    public void populateTable(Lote lote){
+
+
+        final TableLayout tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
+        TableRow row = new TableRow(vista.getContext());
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.MATCH_PARENT);
+        row.setLayoutParams(lp);
+        TableRow.LayoutParams vp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.MATCH_PARENT,1.0f);
+        TextView textView = new TextView(vista.getContext());
+        textView.setLayoutParams(vp);
+        textView.setText(lote.getNumLote());
+        row.addView(textView);
+        TextView textView2 = new TextView(vista.getContext());
+        textView2.setLayoutParams(vp);
+        textView2.setText(lote.getMaterial());
+        row.addView(textView2);
+        TextView textView3 = new TextView(vista.getContext());
+        textView3.setLayoutParams(vp);
+        textView3.setText(String.valueOf(lote.getCantidad()));
+        row.addView(textView3);
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TableRow tr1=(TableRow)v;
+                for (int i = 0; i < tableLayout.getChildCount(); i++)
+                {
+                    View row = tableLayout.getChildAt(i);
+                    if (row == v)
+                    {
+                        row.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                    }
+                    else
+                    {
+                        //Change this to your normal background color.
+                        row.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    }
+                }
+
+            }
+        });
+        tableLayout.addView(row);
+        
+
+
     }
 }

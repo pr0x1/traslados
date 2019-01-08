@@ -33,9 +33,7 @@ public class LectorFragment extends Fragment  {
     private String mParam1;
     private String mParam2;
     public LectorFragment() {
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, "Lector");
-        this.setArguments(args);
+
     }
     public static LectorFragment newInstance(String param1, String param2) {
         LectorFragment fragment = new LectorFragment();

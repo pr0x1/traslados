@@ -116,10 +116,12 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
        // The user selected the headline of an article from the HeadlinesFragment
         // Capture the article fragment from the activity layout
         EnvioFragment envioFragment = (EnvioFragment) mSectionsPagerAdapter.getItem(1);
+        envioFragment.PasaLote(lote);
         Bundle args = new Bundle();
         args.putParcelable(LOTE_KEY,lote);
         envioFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
         transaction.commit();
 
 
