@@ -22,7 +22,8 @@
         <activity
             android:name=".LecturaActivity"
             android:label="@string/title_activity_lectura"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TableCard"></activity>
     </application>
 
 </manifest>
