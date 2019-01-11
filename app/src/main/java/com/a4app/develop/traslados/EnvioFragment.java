@@ -3,16 +3,25 @@ package com.a4app.develop.traslados;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.modelo.Contact;
+import com.a4app.develop.traslados.modelo.ContactsAdapter;
 import com.a4app.develop.traslados.modelo.Lote;
+import com.a4app.develop.traslados.modelo.LoteAdapter;
+
+import java.util.ArrayList;
 
 
 /**
@@ -31,11 +40,21 @@ public class EnvioFragment extends Fragment {
     private TableLayout tableLayout;
     private View vista;
 
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+
+
+   private ArrayList<Lote> lotes;
+   private RecyclerView rvRollos;
+   private RecyclerView mAdapter;
+   private LoteAdapter adapter;
+   private LinearLayout rolloLayout;
 
     public EnvioFragment() {
         // Required empty public constructor
@@ -73,8 +92,15 @@ public class EnvioFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vista = inflater.inflate(R.layout.fragment_envio, container, false);
-        tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
-
+        //tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
+        rvRollos = (RecyclerView) vista.findViewById(R.id.rvTablaRollos);
+        rolloLayout = (LinearLayout) vista.findViewById(R.id.tablaRollosLayaout);
+        lotes = new ArrayList<Lote>();
+        adapter = new LoteAdapter(lotes);
+        // Attach the adapter to the recyclerview to populate items
+        rvRollos.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvRollos.setLayoutManager(new LinearLayoutManager(vista.getContext()));
         return vista;
     }
 
@@ -126,8 +152,16 @@ public class EnvioFragment extends Fragment {
 
     public void populateTable(Lote lote){
 
+        // Initialize contacts
+           // Create adapter passing in the sample user data
+        adapter.addItem(lote,0);
+        // Attach the adapter to the recyclerview to populate items
+      //  rvContacts.setAdapter(adapter);
+        // Set layout manager to position the items
+       // rvContacts.setLayoutManager(new LinearLayoutManager(this));
 
-        final TableLayout tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
+
+        /*final TableLayout tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
         TableRow row = new TableRow(vista.getContext());
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.MATCH_PARENT);
         row.setLayoutParams(lp);
@@ -166,7 +200,7 @@ public class EnvioFragment extends Fragment {
         });
         tableLayout.addView(row);
 
-
+*/
 
     }
 }
