@@ -1,12 +1,16 @@
 package com.a4app.develop.traslados;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,7 @@ import com.a4app.develop.traslados.modelo.Contact;
 import com.a4app.develop.traslados.modelo.ContactsAdapter;
 import com.a4app.develop.traslados.modelo.Lote;
 import com.a4app.develop.traslados.modelo.LoteAdapter;
+import com.a4app.develop.traslados.modelo.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
 
@@ -55,6 +60,7 @@ public class EnvioFragment extends Fragment {
    private RecyclerView mAdapter;
    private LoteAdapter adapter;
    private LinearLayout rolloLayout;
+   private Context context;
 
     public EnvioFragment() {
         // Required empty public constructor
@@ -100,7 +106,9 @@ public class EnvioFragment extends Fragment {
         // Attach the adapter to the recyclerview to populate items
         rvRollos.setAdapter(adapter);
         // Set layout manager to position the items
-        rvRollos.setLayoutManager(new LinearLayoutManager(vista.getContext()));
+        context = vista.getContext();
+        rvRollos.setLayoutManager(new LinearLayoutManager(context));
+        enableSwipeToDeleteAndUndo();
         return vista;
     }
 
@@ -155,6 +163,7 @@ public class EnvioFragment extends Fragment {
         // Initialize contacts
            // Create adapter passing in the sample user data
         adapter.addItem(lote,0);
+        
         // Attach the adapter to the recyclerview to populate items
       //  rvContacts.setAdapter(adapter);
         // Set layout manager to position the items
@@ -202,5 +211,40 @@ public class EnvioFragment extends Fragment {
 
 */
 
+
     }
+    private void enableSwipeToDeleteAndUndo() {
+
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(context) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+                final int position = viewHolder.getAdapterPosition();
+                final Lote item = adapter.getLotes().get(position);
+
+                adapter.removeItem(position);
+
+
+                Snackbar snackbar = Snackbar
+                        .make(rolloLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        adapter.restoreItem(item, position);
+                        rvRollos.scrollToPosition(position);
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(rvRollos);
+    }
+
 }

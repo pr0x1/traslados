@@ -13,7 +13,7 @@ public class CentrosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_centros);
     }
     public void goCentrosActivity(View vista){
-        Intent i = new Intent(this, TableCard.class);
+        Intent i = new Intent(this, LecturaActivity.class);
         /*if (texto.equals("") || texto.equals(null))
             i.putExtra("texto", "TEXTO VACÍO");
         else

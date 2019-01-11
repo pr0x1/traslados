@@ -10,18 +10,23 @@
     >
 
     <TextView
-        android:id="@+id/contact_name"
+        android:id="@+id/Lote1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         />
 
-    <Button
-        android:id="@+id/message_button"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/material1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="10sp"
+        android:layout_weight="1"
+        />
+
+    <TextView
+        android:id="@+id/peso1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         />
 </LinearLayout>

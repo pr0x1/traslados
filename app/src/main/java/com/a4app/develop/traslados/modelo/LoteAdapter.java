@@ -12,20 +12,20 @@ import com.a4app.develop.traslados.R;
 
 import java.util.List;
 
-public class ContactsAdapter extends
-        RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+public class LoteAdapter extends
+        RecyclerView.Adapter<LoteAdapter.ViewHolder> {
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    private List<Contact> mContacts;
+    private List<Lote> lotes;
 
     // Pass in the contact array into the constructor
-    public ContactsAdapter(List<Contact> contacts) {
-        setmContacts(contacts);
+    public LoteAdapter(List<Lote> lotes) {
+        setmContacts(lotes);
     }
 
     @Override
-    public ContactsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LoteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -39,41 +39,45 @@ public class ContactsAdapter extends
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(LoteAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Contact contact = getmContacts().get(position);
+        Lote contact = getLotes().get(position);
 
         // Set item views based on your views and data model
         TextView textViewRollo = viewHolder.textRollo;
-        textViewRollo.setText(contact.getName());
+        textViewRollo.setText(contact.getNumLote());
         TextView textViewMaterial = viewHolder.textMaterial;
-        textViewMaterial.setText(contact.isOnline() ? "Message" : "Offline");
+        textViewMaterial.setText(contact.getMaterial());
         TextView textViewPeso = viewHolder.textPeso;
-        textViewPeso.setText(contact.isOnline() ? "Message" : "Offline");
+        textViewPeso.setText(String.valueOf(contact.getCantidad()));
 
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return getmContacts().size();
+        return getLotes().size();
     }
 
-    public List<Contact> getmContacts() {
-        return mContacts;
+    public List<Lote> getLotes() {
+        return lotes;
     }
 
-    public void setmContacts(List<Contact> mContacts) {
-        this.mContacts = mContacts;
+    public void setmContacts(List<Lote> mContacts) {
+        this.lotes = mContacts;
     }
     public void removeItem(int position) {
-        mContacts.remove(position);
+        lotes.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mContacts.size());
+        notifyItemRangeChanged(position, lotes.size());
     }
 
-    public void restoreItem(Contact item, int position) {
-        mContacts.add(position, item);
+    public void restoreItem(Lote item, int position) {
+        lotes.add(position, item);
+        notifyItemInserted(position);
+    }
+    public void addItem(Lote item, int position) {
+        lotes.add(position, item);
         notifyItemInserted(position);
     }
 
