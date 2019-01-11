@@ -21,7 +21,7 @@ public class ContactsAdapter extends
 
     // Pass in the contact array into the constructor
     public ContactsAdapter(List<Contact> contacts) {
-        mContacts = contacts;
+        setmContacts(contacts);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ContactsAdapter extends
         View contactView = inflater.inflate(R.layout.item_contact, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder = new ViewHolder(context,contactView);
         return viewHolder;
     }
 
@@ -41,7 +41,7 @@ public class ContactsAdapter extends
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Contact contact = mContacts.get(position);
+        Contact contact = getmContacts().get(position);
 
         // Set item views based on your views and data model
         TextView textView = viewHolder.nameTextView;
@@ -54,14 +54,37 @@ public class ContactsAdapter extends
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return mContacts.size();
+        return getmContacts().size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public List<Contact> getmContacts() {
+        return mContacts;
+    }
+
+    public void setmContacts(List<Contact> mContacts) {
+        this.mContacts = mContacts;
+    }
+    public void removeItem(int position) {
+        mContacts.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mContacts.size());
+    }
+
+    public void restoreItem(Contact item, int position) {
+        mContacts.add(position, item);
+        notifyItemInserted(position);
+    }
+
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener */{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView nameTextView;
         public Button messageButton;
+        public TextView tvName;
+        public TextView tvHometown;
+        private Context context;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -73,6 +96,26 @@ public class ContactsAdapter extends
             nameTextView = (TextView) itemView.findViewById(R.id.contact_name);
             messageButton = (Button) itemView.findViewById(R.id.message_button);
         }
+        public ViewHolder(Context context, View itemView) {
+            super(itemView);
+            this.nameTextView = (TextView) itemView.findViewById(R.id.contact_name);
+            this.messageButton = (Button) itemView.findViewById(R.id.message_button);
+            // Store the context
+            this.context = context;
+
+            // Attach a click listener to the entire row view
+            //itemView.setOnClickListener(this);
+        }
+    /*    @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                Contact contact = getmContacts().get(position) ;
+                // We can access the data within the views
+           //     Toast.makeText(context, nameTextView.getText(), Toast.LENGTH_SHORT).show();
+            }
+        }*/
+
     }
 
 }
