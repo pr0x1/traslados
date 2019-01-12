@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.a4app.develop.traslados.modelo.Contact;
-import com.a4app.develop.traslados.modelo.ContactsAdapter;
 import com.a4app.develop.traslados.modelo.Lote;
 import com.a4app.develop.traslados.modelo.LoteAdapter;
 import com.a4app.develop.traslados.modelo.SwipeToDeleteCallback;
@@ -163,54 +158,18 @@ public class EnvioFragment extends Fragment {
         // Initialize contacts
            // Create adapter passing in the sample user data
         adapter.addItem(lote,0);
-        
-        // Attach the adapter to the recyclerview to populate items
-      //  rvContacts.setAdapter(adapter);
-        // Set layout manager to position the items
-       // rvContacts.setLayoutManager(new LinearLayoutManager(this));
-
-
-        /*final TableLayout tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
-        TableRow row = new TableRow(vista.getContext());
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.MATCH_PARENT);
-        row.setLayoutParams(lp);
-        TableRow.LayoutParams vp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.MATCH_PARENT,1.0f);
-        TextView textView = new TextView(vista.getContext());
-        textView.setLayoutParams(vp);
-        textView.setText(lote.getNumLote());
-        row.addView(textView);
-        TextView textView2 = new TextView(vista.getContext());
-        textView2.setLayoutParams(vp);
-        textView2.setText(lote.getMaterial());
-        row.addView(textView2);
-        TextView textView3 = new TextView(vista.getContext());
-        textView3.setLayoutParams(vp);
-        textView3.setText(String.valueOf(lote.getCantidad()));
-        row.addView(textView3);
-        row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TableRow tr1=(TableRow)v;
-                for (int i = 0; i < tableLayout.getChildCount(); i++)
-                {
-                    View row = tableLayout.getChildAt(i);
-                    if (row == v)
-                    {
-                        row.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-                    }
-                    else
-                    {
-                        //Change this to your normal background color.
-                        row.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    }
-                }
-
-            }
-        });
-        tableLayout.addView(row);
-
-*/
-
+        TextView kilosText = (TextView) vista.findViewById(R.id.tvTotalKg);
+        kilosText.setText(calculaKg());
+    }
+    public String calculaKg(){
+        String kg = "";
+        double kgd = 0;
+        for (Lote lot:lotes
+             ) {
+            kgd = lot.getCantidad() +kgd;
+        }
+        kg = String.valueOf(kgd);
+        return kg;
 
     }
     private void enableSwipeToDeleteAndUndo() {
