@@ -158,10 +158,9 @@ public class EnvioFragment extends Fragment {
         // Initialize contacts
            // Create adapter passing in the sample user data
         adapter.addItem(lote,0);
-        TextView kilosText = (TextView) vista.findViewById(R.id.tvTotalKg);
-        kilosText.setText(calculaKg());
+        calculaKg();
     }
-    public String calculaKg(){
+    public void calculaKg(){
         String kg = "";
         double kgd = 0;
         for (Lote lot:lotes
@@ -169,7 +168,8 @@ public class EnvioFragment extends Fragment {
             kgd = lot.getCantidad() +kgd;
         }
         kg = String.valueOf(kgd);
-        return kg;
+        TextView kilosText = (TextView) vista.findViewById(R.id.tvTotalKg);
+        kilosText.setText(kg);
 
     }
     private void enableSwipeToDeleteAndUndo() {
@@ -183,16 +183,18 @@ public class EnvioFragment extends Fragment {
                 final Lote item = adapter.getLotes().get(position);
 
                 adapter.removeItem(position);
+                calculaKg();
 
 
                 Snackbar snackbar = Snackbar
-                        .make(rolloLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-                snackbar.setAction("UNDO", new View.OnClickListener() {
+                        .make(rolloLayout, "Lote borrado de la lista.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("Deshacer", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         adapter.restoreItem(item, position);
                         rvRollos.scrollToPosition(position);
+                        calculaKg();
                     }
                 });
 

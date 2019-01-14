@@ -96,7 +96,7 @@ public class LectorFragment extends Fragment  {
 
             }
         });
-        //textEtiqueta.requestFocus();
+
         return v;
     }
 

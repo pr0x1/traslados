@@ -10,15 +10,12 @@
     android:paddingTop="16dp"
     tools:context=".TransporteActivity">
     <TextView
-        android:id="@+id/tEmpTransport"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:id="@+id/tvEmpTransport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/transportadora" />
-
-    <Spinner
-        android:id="@+id/spEmpTransport"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <View
         android:id="@+id/vPlaca"
@@ -29,33 +26,20 @@
         >
 
     </View>
+    <EditText
+        android:id="@+id/etEmpreTransport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        >
+        <requestFocus/>
+    </EditText>
+
     <TextView
-        android:id="@+id/tPlaca"
+        android:id="@+id/tvTCentrosLeidos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/placa"
-        android:layout_marginTop="16dp"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        />
-
-    <Button
-    android:id="@+id/tNext"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Trasladar"
-    android:onClick="goLecturaActivity"
-    android:layout_marginTop="16dp"
-    android:contentDescription="TODO" />
-    <Button
-        android:id="@+id/tBack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Regresar"
-        android:onClick="goCentrosActivity"
-        android:layout_marginTop="16dp"
-        android:contentDescription="TODO" />
+         />
 
 </LinearLayout>
