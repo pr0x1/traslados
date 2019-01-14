@@ -1,11 +1,37 @@
 package com.a4app.develop.traslados.modelo;
 
-public class Transportador {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Transportador implements Parcelable {
     private String codigo;
     private String nombre;
+    private String placa;
 
     public Transportador() {
         // TODO Auto-generated constructor stub
+
+    }
+    public static final Parcelable.Creator<Transportador> CREATOR
+            = new Parcelable.Creator<Transportador>() {
+        public Transportador createFromParcel(Parcel in) {
+            return new Transportador(in);
+        }
+
+        public Transportador[] newArray(int size) {
+            return new Transportador[size];
+        }
+    };
+    private Transportador(Parcel in){
+        codigo = in.readString();
+        nombre = in.readString();
+        placa = in.readString();
+    }
+    public Transportador(String codigo, String nombre, String placa) {
+        // TODO Auto-generated constructor stub
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.placa = placa;
 
     }
 
@@ -25,4 +51,24 @@ public class Transportador {
         this.nombre = nombre;
     }
 
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.codigo);
+        parcel.writeString(this.nombre);
+        parcel.writeString(this.placa);
+
+    }
 }

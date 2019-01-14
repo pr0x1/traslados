@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import com.a4app.develop.traslados.modelo.Lote;
+import com.a4app.develop.traslados.modelo.Transportador;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,14 +34,16 @@ public class LectorFragment extends Fragment  {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private CentrosAlmacen centrosAlmacen;
+    private Transportador  transportador;
     public LectorFragment() {
 
     }
-    public static LectorFragment newInstance(String param1, String param2) {
+    public static LectorFragment newInstance(CentrosAlmacen param1, Transportador param2) {
         LectorFragment fragment = new LectorFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable("centroOrigen", param1);
+        args.putParcelable("transportador", param2);
         fragment.setArguments(args);
         return fragment;
 
@@ -62,6 +66,12 @@ public class LectorFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_lector, container, false);
         final EditText textEtiqueta = (EditText) v.findViewById(R.id.fltextView);
         textEtiqueta.setInputType(InputType.TYPE_NULL);
+        if (getArguments().containsKey("transportador") && getArguments().containsKey("centroOrigen")) {
+            // A choice was made, so get the choice.
+            centrosAlmacen = getArguments().getParcelable("centroOrigen");
+            transportador = getArguments().getParcelable("transportador");
+            // Check the radio button choice.
+        }
 
         textEtiqueta.addTextChangedListener(new TextWatcher() {
             @Override
@@ -139,18 +149,16 @@ public class LectorFragment extends Fragment  {
                 if(token.hasMoreTokens()){
                     texto = token.nextToken();
                 }
-                // TODO: 07/01/2019 este centro es el origen viene de la pistola
-                lote.setCentro(texto);
-                Log.i(Tag,"Centro origen"+texto);
+               lote.setCentro(centrosAlmacen.getCentroOringen());
+                Log.i(Tag,"Centro origen"+lote.getCentro());
 
 
                 // Lee Centro destino
                 if(token.hasMoreTokens()){
                     texto = token.nextToken();
 				}
-                // TODO: 07/01/2019 este centro es el destino viene de las selección del centro
-                lote.setCentro_destino(texto);
-                Log.i(Tag,"Centro origen"+texto);
+                lote.setCentro_destino(centrosAlmacen.getCentroDestino());
+                Log.i(Tag,"Centro origen"+lote.getCentro_destino());
 
                 // Lee Número de pedido
                 if(token.hasMoreTokens()){
@@ -255,17 +263,16 @@ public class LectorFragment extends Fragment  {
                     lote.setCliente("");
                 }
                 Log.i(Tag,"Cliente: " +texto);
-                // TODO: 07/01/2019 aqui va la placa que viene de antes
-                lote.setPlaca("placa".toUpperCase());
+                lote.setPlaca(transportador.getPlaca().toUpperCase());
                 Log.i(Tag,"Placa: " +texto);
                 lote.setDespa("NOPROCESADO");
                 lote.setRecep("NOPROCESADO");
-                // TODO: 07/01/2019 Aqui va el almacen origen
-                lote.setAlmacen("almacenOrigen");
-                // TODO: 07/01/2019 Aquí va el almacén destino
-                lote.setAlmacen_destino("almacen_destino");
-                // TODO: 07/01/2019 Aquí va el transportador
-                lote.setTransportador("transportador");
+                // Aqui va el almacen origen
+                lote.setAlmacen(centrosAlmacen.getAlmacenOrigen());
+                //  Aquí va el almacén destino
+                lote.setAlmacen_destino(centrosAlmacen.getAlmacenDestino());
+                // Aquí va el transportador
+                lote.setTransportador(transportador.getCodigo());
        /*         if (!exiteLote(lote)) {
                     if(lote.getNumPedido().isEmpty()){
                         if(lote.getAlmacen()!=null){
@@ -291,7 +298,6 @@ public class LectorFragment extends Fragment  {
 
             }
         }
-        String a = "";
         return lote;
 
     }
@@ -329,5 +335,6 @@ public class LectorFragment extends Fragment  {
         return lecturaTransformada.toString();
 
     }
+
 
 }

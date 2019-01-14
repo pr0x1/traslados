@@ -147,9 +147,13 @@ public class EnvioFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    public void PasaLote(Lote lote){
-        Lote a = lote;
+    public boolean PasaLote(Lote lote){
+
+        if(!exiteLote(lote)) {
         populateTable(lote);
+            return true;
+        }
+        return false;
 
     }
 
@@ -157,8 +161,11 @@ public class EnvioFragment extends Fragment {
 
         // Initialize contacts
            // Create adapter passing in the sample user data
-        adapter.addItem(lote,0);
-        calculaKg();
+
+            adapter.addItem(lote, 0);
+            calculaKg();
+
+
     }
     public void calculaKg(){
         String kg = "";
@@ -206,6 +213,20 @@ public class EnvioFragment extends Fragment {
 
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(rvRollos);
+    }
+
+    /**
+     * Valida  si existe el rollo que es pasado por parámetro en la tabla de rollos.
+     * @param rollo rollo a evaluar
+     * @return True si el rollo a evaluar existe en a tabla, False si no el rollo a evaluar  no está en la tabla  de rollos
+     */
+    public boolean exiteLote(Lote rollo){
+        for (Lote lote : lotes) {
+            if( lote.getNumLote().equalsIgnoreCase(rollo.getNumLote())){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

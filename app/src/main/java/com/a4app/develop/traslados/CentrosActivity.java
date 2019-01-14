@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.modelo.CentrosAlmacen;
+
 import java.util.StringTokenizer;
 
 public class CentrosActivity extends AppCompatActivity {
@@ -65,11 +67,14 @@ public class CentrosActivity extends AppCompatActivity {
     }
     public void goCentrosActivity(){
         Intent i = new Intent(contexto, TransporteActivity.class);
+
         if (validaCampos()) {
-            i.putExtra("centroOrigen", getCentroOringen());
-            i.putExtra("almacenOrigen", getAlmacenOrigen());
-            i.putExtra("centroDestino", getCentroDestino());
-            i.putExtra("almacenDestino", getAlmacenDestino());
+            CentrosAlmacen centrosAlm = new CentrosAlmacen();
+            centrosAlm.setCentroOringen(getCentroOringen());
+            centrosAlm.setAlmacenOrigen(getAlmacenOrigen());
+            centrosAlm.setCentroDestino(getCentroDestino());
+            centrosAlm.setAlmacenDestino(getAlmacenDestino());
+            i.putExtra("centrosAlm", centrosAlm);
             startActivity(i);
         } else{
             TextView centroMensaje = findViewById(R.id.tvCentroMensajes);

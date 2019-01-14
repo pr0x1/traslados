@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.modelo.CentrosAlmacen;
+import com.a4app.develop.traslados.modelo.Transportador;
+
 import java.util.StringTokenizer;
 
 public class TransporteActivity extends AppCompatActivity {
@@ -19,6 +22,8 @@ public class TransporteActivity extends AppCompatActivity {
     private Context contexto;
     private String codigoTransportador;
     private String nombreTransportador;
+    private String placa;
+    private CentrosAlmacen centroOrigen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -29,11 +34,8 @@ public class TransporteActivity extends AppCompatActivity {
         textoTransportador.setInputType(InputType.TYPE_NULL);
         textoCentros = (TextView) findViewById(R.id.tvTCentrosLeidos);
         Intent intent = getIntent();
-        String centroOrigen = intent.getStringExtra("centroOrigen");
-        String almacenOrigen = intent.getStringExtra("almacenOrigen");
-        String centroDestino = intent.getStringExtra("centroDestino");
-        String almacenDestino = intent.getStringExtra("almacenDestino");
-        textoCentros.setText(centroOrigen+" "+almacenOrigen+" "+centroDestino+" "+almacenDestino);
+        centroOrigen = intent.getParcelableExtra("centrosAlm");
+        textoCentros.setText(centroOrigen.getAlmacenOrigen()+" "+centroOrigen.getAlmacenOrigen()+" "+centroOrigen.getCentroDestino()+" "+centroOrigen.getAlmacenDestino());
         textoTransportador.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -76,8 +78,12 @@ public class TransporteActivity extends AppCompatActivity {
     public void goLecturaActivity(){
         Intent i = new Intent(contexto, LecturaActivity.class);
         if (validaCampos()) {
-            i.putExtra("codTransportador", getCodigoTransportador());
-            i.putExtra("nombreTransportador", getNombreTransportador());
+            Transportador transportador = new Transportador();
+            transportador.setCodigo(getCodigoTransportador());
+            transportador.setNombre(getNombreTransportador());
+            transportador.setPlaca(getPlaca());
+            i.putExtra("transportador", transportador);
+            i.putExtra("centrosAlm",centroOrigen);
             startActivity(i);
         } else{
             textoCentros = findViewById(R.id.tvTCentrosLeidos);
@@ -98,6 +104,10 @@ public class TransporteActivity extends AppCompatActivity {
                 if (token.hasMoreTokens()) {
                     fragmento = token.nextToken();
                     setNombreTransportador(fragmento);
+                }
+                if (token.hasMoreTokens()) {
+                    fragmento = token.nextToken();
+                    setPlaca(fragmento);
                 }
 
 
@@ -130,5 +140,13 @@ public class TransporteActivity extends AppCompatActivity {
 
     public void setNombreTransportador(String nombreTransportador) {
         this.nombreTransportador = nombreTransportador;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 }

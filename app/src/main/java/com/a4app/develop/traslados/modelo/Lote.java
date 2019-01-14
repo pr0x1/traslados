@@ -27,6 +27,71 @@ public class Lote implements Parcelable {
     private String despa;
     private String recep;
     private String transportador;
+    public static final Parcelable.Creator<Lote> CREATOR
+            = new Parcelable.Creator<Lote>() {
+        public Lote createFromParcel(Parcel in) {
+            return new Lote(in);
+        }
+
+        public Lote[] newArray(int size) {
+            return new Lote[size];
+        }
+    };
+    private Lote (Parcel in){
+         String numLote = in.readString();
+         String numPedido = in.readString();
+         String posPedido = in.readString();
+         String centro = in.readString();
+         String centro_destino = in.readString();
+         String almacen = in.readString();
+         String almacen_destino = in.readString();
+         String material = in.readString();
+         double cantidad  = in.readDouble();
+         String unidad_medida = in.readString();
+         String cliente = in.readString();
+         String fecha_salida = in.readString();
+         String entrega = in.readString();
+         String ordenCompra = in.readString();
+         String transporte = in.readString();
+         String estado = in.readString();
+         String placa = in.readString();
+         String fecha_registro = in.readString();
+         String despa = in.readString();
+         String recep = in.readString();
+         String transportador = in.readString();
+    }
+    public Lote(){
+
+    }
+    public Lote(String  numLote, String numPedido,String posPedido, String centro, String centro_destino,
+                String almacen,  String almacen_destino, String material, double cantidad,
+                String unidad_medida,  String cliente, String fecha_salida, String entrega,
+                String ordenCompra, String transporte, String estado, String placa, String fecha_registro,
+                String despa, String recep, String transportador){
+        this.numLote = numLote;
+        this.numPedido = numPedido;
+        this.posPedido = posPedido;
+        this.centro = centro;
+        this.centro_destino = centro_destino;
+        this.almacen = almacen;
+        this.almacen_destino = almacen_destino;
+        this.material = material;
+        this.cantidad = cantidad;
+        this.unidad_medida = unidad_medida;
+        this.cliente = cliente;
+        this.fecha_salida = fecha_salida;
+        this.entrega = entrega;
+        this.ordenCompra = ordenCompra;
+        this.transporte = transporte;
+        this.estado = estado;
+        this.placa = placa;
+        this.fecha_registro = fecha_registro;
+        this.despa = despa;
+        this.recep = recep;
+        this.transportador = transportador;
+
+
+    }
 
     public String getNumLote() {
         return numLote;
@@ -203,6 +268,28 @@ public class Lote implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
+        parcel.writeString(this.numLote);
+        parcel.writeString(this.numPedido);
+        parcel.writeString(this.posPedido);
+        parcel.writeString(this.centro);
+        parcel.writeString(this.centro_destino);
+        parcel.writeString(this.almacen);
+        parcel.writeString(this.almacen_destino);
+        parcel.writeString(this.material);
+        parcel.writeDouble(this.cantidad);
+        parcel.writeString(this.unidad_medida);
+        parcel.writeString(this.cliente);
+        parcel.writeString(this.fecha_salida);
+        parcel.writeString(this.entrega);
+        parcel.writeString(this.ordenCompra);
+        parcel.writeString(this.transporte);
+        parcel.writeString(this.estado);
+        parcel.writeString(this.placa);
+        parcel.writeString(this.fecha_registro);
+        parcel.writeString(this.despa);
+        parcel.writeString(this.recep);
+        parcel.writeString(this.transportador);
     }
+
+
 }

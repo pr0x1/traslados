@@ -18,7 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import com.a4app.develop.traslados.modelo.Lote;
+import com.a4app.develop.traslados.modelo.Transportador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +42,16 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
      */
     private ViewPager mViewPager;
     private TabLayout tabLayout;
+    private CentrosAlmacen centrosAlmacen;
+    private Transportador transportador;
     public static final String LOTE_KEY = "lote_key";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectura);
+        Intent intent = getIntent();
+        centrosAlmacen  = intent.getParcelableExtra("centrosAlm");
+        transportador = intent.getParcelableExtra("transportador");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,7 +70,11 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
        //mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
       // tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+    }
+
+
+    @Override/*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,11 +82,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
                         .setAction("Action", null).show();
             }
         });
-
-    }
-
-
-    @Override
+*/
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_lectura, menu);
@@ -106,7 +113,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     private void populateViewPager() {
 
         TabDetails tab;
-        tab = new TabDetails("Lectura",new LectorFragment());
+        tab = new TabDetails("Lectura", LectorFragment.newInstance(centrosAlmacen,transportador));
         mSectionsPagerAdapter.addFragment(tab);
         tab = new TabDetails("Traslado",new EnvioFragment());
         mSectionsPagerAdapter.addFragment(tab);
@@ -121,13 +128,16 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
        // The user selected the headline of an article from the HeadlinesFragment
         // Capture the article fragment from the activity layout
         EnvioFragment envioFragment = (EnvioFragment) mSectionsPagerAdapter.getItem(1);
-        envioFragment.PasaLote(lote);
-        Bundle args = new Bundle();
+       if(!envioFragment.PasaLote(lote)) {
+           Snackbar.make(mViewPager, "Lote ya cargado", Snackbar.LENGTH_LONG)
+                   .setAction("Action", null).show();
+       }
+       /* Bundle args = new Bundle();
         args.putParcelable(LOTE_KEY,lote);
         envioFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit();*/
 
 
 
