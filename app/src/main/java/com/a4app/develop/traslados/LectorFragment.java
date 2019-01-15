@@ -273,28 +273,6 @@ public class LectorFragment extends Fragment  {
                 lote.setAlmacen_destino(centrosAlmacen.getAlmacenDestino());
                 // Aquí va el transportador
                 lote.setTransportador(transportador.getCodigo());
-       /*         if (!exiteLote(lote)) {
-                    if(lote.getNumPedido().isEmpty()){
-                        if(lote.getAlmacen()!=null){
-                            lotes.add(lote);
-                            borraLectura();
-                            //Conexion.guardaEtiqueta(lote);
-                        }else{
-                            FacesContext context = FacesContext.getCurrentInstance();
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia",
-                                    "No se cargo el almacen para el lote  " + lote.getNumLote()));
-                        }
-                    }else{
-                        lotes.add(lote);
-                        //Conexion.guardaEtiqueta(lote);
-                        borraLectura();
-                    }
-
-                } else {
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia",
-                            "Ya cargó el lote " + lote.getNumLote()));
-                }*/
 
             }
         }

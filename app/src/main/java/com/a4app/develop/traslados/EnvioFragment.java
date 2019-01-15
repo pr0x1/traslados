@@ -10,18 +10,30 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a4app.develop.traslados.modelo.Lote;
 import com.a4app.develop.traslados.modelo.LoteAdapter;
+import com.a4app.develop.traslados.modelo.Profile;
+import com.a4app.develop.traslados.modelo.Respuesta;
+import com.a4app.develop.traslados.modelo.RollosService;
 import com.a4app.develop.traslados.modelo.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -96,6 +108,42 @@ public class EnvioFragment extends Fragment {
         //tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
         rvRollos = (RecyclerView) vista.findViewById(R.id.rvTablaRollos);
         rolloLayout = (LinearLayout) vista.findViewById(R.id.tablaRollosLayaout);
+        Button btonTransportar = (Button) vista.findViewById(R.id.btnTransportar);
+        btonTransportar.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v)
+            {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                RollosService rollosService = retrofit.create(RollosService.class);
+                ArrayList<Profile> profiles = new ArrayList<>();
+                Profile a = new Profile("14609695", "Yamit Alejandro");
+                Profile b = new Profile("1130606725", "Diego Alexander Soler");
+                profiles.add(a);
+                profiles.add(b);
+                Call<Respuesta> call = rollosService.enviaLotes(lotes);
+
+                call.enqueue(new Callback<Respuesta>() {
+                    @Override
+                    public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                        Respuesta a = response.body();
+                        Log.i("ApiRestfull", a.getId());
+                        Log.i("ApiRestfull", a.getMensaje());
+                        Toast toast = Toast.makeText(context, a.getMensaje(), Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Respuesta> call, Throwable t) {
+                    }
+                });
+
+            }
+        });
         lotes = new ArrayList<Lote>();
         adapter = new LoteAdapter(lotes);
         // Attach the adapter to the recyclerview to populate items
@@ -228,5 +276,7 @@ public class EnvioFragment extends Fragment {
         }
         return false;
     }
+
+
 
 }

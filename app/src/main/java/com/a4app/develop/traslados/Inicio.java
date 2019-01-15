@@ -2,8 +2,12 @@ package com.a4app.develop.traslados;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.a4app.develop.traslados.modelo.Profile;
+import com.a4app.develop.traslados.modelo.Respuesta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +29,8 @@ public class Inicio extends AppCompatActivity {
         setContentView(R.layout.activity_inicio);
         arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,titles);
         list = findViewById(R.id.list);
-        getPosts();
+        //getPosts();
+        getPostsLotes();
         list.setAdapter(arrayAdapter);
     }
 
@@ -48,6 +53,33 @@ public class Inicio extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
+            }
+        });
+    }
+    private void getPostsLotes() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        PostService postService = retrofit.create(PostService.class);
+        ArrayList<Profile> profiles = new ArrayList<Profile>();
+        Profile a = new Profile("14609695", "Yamit Alejandro");
+        Profile b = new Profile("1130606725", "Diego Alexander Soler");
+        profiles.add(a);
+        profiles.add(b);
+        Call<Respuesta> call = postService.enviaLotes(profiles);
+
+        call.enqueue(new Callback<Respuesta>() {
+            @Override
+            public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
+                Respuesta a = response.body();
+                Log.i("ApiRestfull", a.getId());
+                Log.i("ApiRestfull", a.getMensaje());
+
+            }
+
+            @Override
+            public void onFailure(Call<Respuesta> call, Throwable t) {
             }
         });
     }
