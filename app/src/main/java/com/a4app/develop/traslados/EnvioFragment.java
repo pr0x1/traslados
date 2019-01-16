@@ -28,6 +28,7 @@ import com.a4app.develop.traslados.modelo.RollosService;
 import com.a4app.develop.traslados.modelo.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,26 +120,25 @@ public class EnvioFragment extends Fragment {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 RollosService rollosService = retrofit.create(RollosService.class);
-                ArrayList<Profile> profiles = new ArrayList<>();
-                Profile a = new Profile("14609695", "Yamit Alejandro");
-                Profile b = new Profile("1130606725", "Diego Alexander Soler");
-                profiles.add(a);
-                profiles.add(b);
-                Call<Respuesta> call = rollosService.enviaLotes(lotes);
 
-                call.enqueue(new Callback<Respuesta>() {
+                Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
+                call.enqueue(new Callback<List<Respuesta>>() {
                     @Override
-                    public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
-                        Respuesta a = response.body();
-                        Log.i("ApiRestfull", a.getId());
-                        Log.i("ApiRestfull", a.getMensaje());
-                        Toast toast = Toast.makeText(context, a.getMensaje(), Toast.LENGTH_LONG);
+                    public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
+                        ArrayList<Respuesta> respuestas = (ArrayList<Respuesta>) response.body();
+                        for (Respuesta a : respuestas
+                             ) {
+                            Log.i("ApiRestfull", a.getTipo());
+                            Log.i("ApiRestfull", a.getMensaje());
+                        }
+
+                        Toast toast = Toast.makeText(context, "Response", Toast.LENGTH_LONG);
                         toast.show();
 
                     }
 
                     @Override
-                    public void onFailure(Call<Respuesta> call, Throwable t) {
+                    public void onFailure(Call<List<Respuesta>> call, Throwable t) {
                     }
                 });
 

@@ -11,8 +11,8 @@ import retrofit2.http.POST;
 
 public interface RollosService {
 
-    String API_ROUTE = "rollos";
+    String API_ROUTE = "tras";
     @POST(API_ROUTE)
-    Call<Respuesta> enviaLotes(@Body List<Lote> lotes);
+    Call<List<Respuesta>> enviaLotes(@Body List<Lote> lotes);
 
 }

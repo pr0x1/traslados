@@ -73,7 +73,7 @@ public class Inicio extends AppCompatActivity {
             @Override
             public void onResponse(Call<Respuesta> call, Response<Respuesta> response) {
                 Respuesta a = response.body();
-                Log.i("ApiRestfull", a.getId());
+                Log.i("ApiRestfull", a.getTipo());
                 Log.i("ApiRestfull", a.getMensaje());
 
             }

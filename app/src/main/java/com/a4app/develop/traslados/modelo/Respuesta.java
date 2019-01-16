@@ -1,21 +1,21 @@
 package com.a4app.develop.traslados.modelo;
 
 public class Respuesta {
-    private String id;
+    private String tipo;
     private String mensaje;
 
 
-    public Respuesta (String id, String mensaje){
-        this.id = id;
+    public Respuesta (String tipo, String mensaje){
+        this.tipo = tipo;
         this.mensaje = mensaje;
     }
 
-    public String getId() {
-        return id;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getMensaje() {
@@ -24,5 +24,11 @@ public class Respuesta {
 
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
+    }
+
+    @Override
+    public String toString() {
+        String a = this.tipo + ":" +this.mensaje;
+        return a;
     }
 }
