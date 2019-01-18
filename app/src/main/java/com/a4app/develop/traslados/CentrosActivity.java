@@ -16,16 +16,15 @@ import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import java.util.StringTokenizer;
 
 public class CentrosActivity extends AppCompatActivity {
-    private String centroOringen;
-    private String almacenOrigen;
-    private String centroDestino;
-    private String almacenDestino;
+    private CentrosAlmacen centrosAlmacen;
     private Context contexto;
     private EditText textCentros;
+    private int contador;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+        contador = 0;
         setContentView(R.layout.activity_centros);
         textCentros = (EditText) findViewById(R.id.etCentros);
         textCentros.setInputType(InputType.TYPE_NULL);
@@ -51,8 +50,8 @@ public class CentrosActivity extends AppCompatActivity {
 
                 String textoLeido  = s.toString();
                 if(!textoLeido.equals("") && !textoLeido.isEmpty() && textoLeido != null) {
-                procesaLecturaCentros(textoLeido);
-                goCentrosActivity();
+                centrosAlmacen =  procesaLecturaCentros(textoLeido);
+                goCentrosActivity(centrosAlmacen);
                    CharSequence text = "Cambiado!After";
                     int duration = Toast.LENGTH_SHORT;
 
@@ -65,16 +64,11 @@ public class CentrosActivity extends AppCompatActivity {
             }
         });
     }
-    public void goCentrosActivity(){
+    public void goCentrosActivity(CentrosAlmacen centrosAlmacen){
         Intent i = new Intent(contexto, TransporteActivity.class);
 
-        if (validaCampos()) {
-            CentrosAlmacen centrosAlm = new CentrosAlmacen();
-            centrosAlm.setCentroOringen(getCentroOringen());
-            centrosAlm.setAlmacenOrigen(getAlmacenOrigen());
-            centrosAlm.setCentroDestino(getCentroDestino());
-            centrosAlm.setAlmacenDestino(getAlmacenDestino());
-            i.putExtra("centrosAlm", centrosAlm);
+        if (validaCampos(centrosAlmacen)) {
+            i.putExtra("centrosAlm", centrosAlmacen);
             startActivity(i);
         } else{
             TextView centroMensaje = findViewById(R.id.tvCentroMensajes);
@@ -83,73 +77,73 @@ public class CentrosActivity extends AppCompatActivity {
 
 
     }
-    public void procesaLecturaCentros(String lectura){
+    public CentrosAlmacen procesaLecturaCentros(String lectura){
         if (lectura != null) {
             StringTokenizer token = new StringTokenizer(lectura, "#");
+            centrosAlmacen = new CentrosAlmacen();
             String fragmento = "";
+            contador = 0;
             while (token.hasMoreTokens()) {
                 // Lee centro origen;
                 if (token.hasMoreTokens()) {
                     fragmento = token.nextToken();
-                    setCentroOringen(fragmento);
+                    centrosAlmacen.setCentroOringen(fragmento);
+                    contador++;
                 }
                 if (token.hasMoreTokens()) {
                     fragmento = token.nextToken();
-                    setAlmacenOrigen(fragmento);
+                    centrosAlmacen.setDesCentroOrigen(fragmento);
+                    contador++;
                 }
                 if (token.hasMoreTokens()) {
                     fragmento = token.nextToken();
-                    setCentroDestino(fragmento);
+                    centrosAlmacen.setAlmacenOrigen(fragmento);
+                    contador++;
                 }
                 if (token.hasMoreTokens()) {
                     fragmento = token.nextToken();
-                    setAlmacenDestino(fragmento);
+                    centrosAlmacen.setDesAlmacenOrigen(fragmento);
+                    contador++;
                 }
+                if (token.hasMoreTokens()) {
+                    fragmento = token.nextToken();
+                    centrosAlmacen.setCentroDestino(fragmento);
+                    contador++;
+                }
+                if (token.hasMoreTokens()) {
+                    fragmento = token.nextToken();
+                    centrosAlmacen.setDesCentroDestino(fragmento);
+                    contador++;
+                }
+                if (token.hasMoreTokens()) {
+                    fragmento = token.nextToken();
+                    centrosAlmacen.setAlmacenDestino(fragmento);
+                    contador++;
+                }
+                if (token.hasMoreTokens()) {
+                    fragmento = token.nextToken();
+                    centrosAlmacen.setDesAlmacenDestino(fragmento);
+                    contador++;
+                }
+
 
             }
         }
+        return centrosAlmacen;
 
     }
-    private boolean validaCampos(){
-        if((getCentroOringen().equals("")|| getAlmacenOrigen() == null)){
+    private boolean validaCampos(CentrosAlmacen centrosAlmacen){
+        if(centrosAlmacen!=null) {
+            if(contador<8){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
             return false;
         }
-        if((getCentroDestino().equals("")||getAlmacenDestino() == null)){
-            return false;
-        }
-        return true;
-
     }
 
-    public String getCentroOringen() {
-        return centroOringen;
-    }
 
-    public void setCentroOringen(String centroOringen) {
-        this.centroOringen = centroOringen;
-    }
 
-    public String getAlmacenOrigen() {
-        return almacenOrigen;
-    }
-
-    public void setAlmacenOrigen(String almacenOrigen) {
-        this.almacenOrigen = almacenOrigen;
-    }
-
-    public String getCentroDestino() {
-        return centroDestino;
-    }
-
-    public void setCentroDestino(String centroDestino) {
-        this.centroDestino = centroDestino;
-    }
-
-    public String getAlmacenDestino() {
-        return almacenDestino;
-    }
-
-    public void setAlmacenDestino(String almacenDestino) {
-        this.almacenDestino = almacenDestino;
-    }
 }

@@ -1,15 +1,30 @@
 package com.a4app.develop.traslados.modelo;
 
-public class Respuesta {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Respuesta implements Parcelable {
     private String tipo;
     private String mensaje;
 
+    public static final Parcelable.Creator<Respuesta> CREATOR
+            = new Parcelable.Creator<Respuesta>() {
+        public Respuesta createFromParcel(Parcel in) {
+            return new Respuesta(in);
+        }
 
+        public Respuesta[] newArray(int size) {
+            return new Respuesta[size];
+        }
+    };
     public Respuesta (String tipo, String mensaje){
         this.tipo = tipo;
         this.mensaje = mensaje;
     }
-
+    private Respuesta(Parcel in){
+         tipo = in.readString();
+         mensaje = in.readString();
+    }
     public String getTipo() {
         return tipo;
     }
@@ -30,5 +45,16 @@ public class Respuesta {
     public String toString() {
         String a = this.tipo + ":" +this.mensaje;
         return a;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.tipo);
+        parcel.writeString(this.mensaje);
     }
 }

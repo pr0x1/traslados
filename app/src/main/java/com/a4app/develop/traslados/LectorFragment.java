@@ -95,10 +95,8 @@ public class LectorFragment extends Fragment  {
                   Lote lote  =  procesaLectura(textoLeido);
                   mCallback.onLoteCreated(lote);
                    Context context = getContext();
-                   CharSequence text = "Cambiado!After";
                    int duration = Toast.LENGTH_SHORT;
-
-                   Toast toast = Toast.makeText(context, text, duration);
+                   Toast toast = Toast.makeText(context, lote.getNumLote(), duration);
                    toast.show();
                    textEtiqueta.setText("");
                }

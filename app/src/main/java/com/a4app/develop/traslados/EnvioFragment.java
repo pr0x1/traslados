@@ -1,7 +1,10 @@
 package com.a4app.develop.traslados;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -101,6 +104,7 @@ public class EnvioFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,32 +119,39 @@ public class EnvioFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                RollosService rollosService = retrofit.create(RollosService.class);
 
-                Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
-                call.enqueue(new Callback<List<Respuesta>>() {
-                    @Override
-                    public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
-                        ArrayList<Respuesta> respuestas = (ArrayList<Respuesta>) response.body();
-                        for (Respuesta a : respuestas
-                             ) {
-                            Log.i("ApiRestfull", a.getTipo());
-                            Log.i("ApiRestfull", a.getMensaje());
+                if(validadConexion()) {
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    RollosService rollosService = retrofit.create(RollosService.class);
+
+                    Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
+                    call.enqueue(new Callback<List<Respuesta>>() {
+                        @Override
+                        public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
+                            ArrayList<Respuesta> respuestas = (ArrayList<Respuesta>) response.body();
+                            for (Respuesta a : respuestas
+                            ) {
+                                Log.i("ApiRestfull", a.getTipo());
+                                Log.i("ApiRestfull", a.getMensaje());
+                            }
+                            Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
+                            intent.putParcelableArrayListExtra("respuestas", respuestas);
+                            startActivity(intent);
                         }
 
-                        Toast toast = Toast.makeText(context, "Response", Toast.LENGTH_LONG);
-                        toast.show();
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Respuesta>> call, Throwable t) {
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<List<Respuesta>> call, Throwable t) {
+                            Toast toast = Toast.makeText(context, "Error conexión a SAP", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    });
+                }else{
+                    Toast toast = Toast.makeText(context, "Error de Conexion a red", Toast.LENGTH_LONG);
+                    toast.show();
+                }
 
             }
         });
@@ -277,6 +288,14 @@ public class EnvioFragment extends Fragment {
         return false;
     }
 
+    public boolean validadConexion() {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
 
 }

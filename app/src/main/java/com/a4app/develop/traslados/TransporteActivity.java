@@ -35,7 +35,7 @@ public class TransporteActivity extends AppCompatActivity {
         textoCentros = (TextView) findViewById(R.id.tvTCentrosLeidos);
         Intent intent = getIntent();
         centroOrigen = intent.getParcelableExtra("centrosAlm");
-        textoCentros.setText(centroOrigen.getAlmacenOrigen()+" "+centroOrigen.getAlmacenOrigen()+" "+centroOrigen.getCentroDestino()+" "+centroOrigen.getAlmacenDestino());
+        textoCentros.setText(centroOrigen.toString());
         textoTransportador.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {

@@ -3,6 +3,7 @@
     package="com.a4app.develop.traslados">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,9 @@
             android:name=".LecturaActivity"
             android:label="@string/title_activity_lectura"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TableCard"></activity>
+        <activity android:name=".TableCard" />
+        <activity android:name=".MensajesActivity"/>
+
     </application>
 
 </manifest>

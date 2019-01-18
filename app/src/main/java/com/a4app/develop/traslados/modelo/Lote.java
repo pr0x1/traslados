@@ -38,27 +38,27 @@ public class Lote implements Parcelable {
         }
     };
     private Lote (Parcel in){
-         String numLote = in.readString();
-         String numPedido = in.readString();
-         String posPedido = in.readString();
-         String centro = in.readString();
-         String centro_destino = in.readString();
-         String almacen = in.readString();
-         String almacen_destino = in.readString();
-         String material = in.readString();
-         double cantidad  = in.readDouble();
-         String unidad_medida = in.readString();
-         String cliente = in.readString();
-         String fecha_salida = in.readString();
-         String entrega = in.readString();
-         String ordenCompra = in.readString();
-         String transporte = in.readString();
-         String estado = in.readString();
-         String placa = in.readString();
-         String fecha_registro = in.readString();
-         String despa = in.readString();
-         String recep = in.readString();
-         String transportador = in.readString();
+          numLote = in.readString();
+          numPedido = in.readString();
+          posPedido = in.readString();
+          centro = in.readString();
+          centro_destino = in.readString();
+          almacen = in.readString();
+          almacen_destino = in.readString();
+          material = in.readString();
+          cantidad  = in.readDouble();
+          unidad_medida = in.readString();
+          cliente = in.readString();
+          fecha_salida = in.readString();
+          entrega = in.readString();
+          ordenCompra = in.readString();
+          transporte = in.readString();
+          estado = in.readString();
+          placa = in.readString();
+          fecha_registro = in.readString();
+          despa = in.readString();
+          recep = in.readString();
+          transportador = in.readString();
     }
     public Lote(){
 
