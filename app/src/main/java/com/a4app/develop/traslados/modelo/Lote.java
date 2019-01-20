@@ -3,8 +3,10 @@ package com.a4app.develop.traslados.modelo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
+import androidx.room.Entity;
+import androidx.room.Ignore;
 
+@Entity(tableName = "lote",primaryKeys = {"numLote","centro","almacen","centro_destino","almacen_destino"})
 public class Lote implements Parcelable {
     private String numLote;
     private String numPedido;
@@ -27,6 +29,7 @@ public class Lote implements Parcelable {
     private String despa;
     private String recep;
     private String transportador;
+    @Ignore
     public static final Parcelable.Creator<Lote> CREATOR
             = new Parcelable.Creator<Lote>() {
         public Lote createFromParcel(Parcel in) {

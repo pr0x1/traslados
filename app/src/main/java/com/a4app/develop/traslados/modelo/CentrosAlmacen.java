@@ -3,8 +3,12 @@ package com.a4app.develop.traslados.modelo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
+@Entity(primaryKeys = {"centroOringen","almacenOrigen,","centroDestino","almacenDestino"},tableName = "centrosAlmacen")
 public class CentrosAlmacen implements Parcelable {
-    //private static String CREATOR;
+
     private String centroOringen;
     private String desCentroOrigen;
     private String almacenOrigen;
@@ -13,6 +17,7 @@ public class CentrosAlmacen implements Parcelable {
     private String desCentroDestino;
     private String almacenDestino;
     private String desAlmacenDestino;
+    @Ignore
     public static final Parcelable.Creator<CentrosAlmacen> CREATOR
             = new Parcelable.Creator<CentrosAlmacen>() {
         public CentrosAlmacen createFromParcel(Parcel in) {

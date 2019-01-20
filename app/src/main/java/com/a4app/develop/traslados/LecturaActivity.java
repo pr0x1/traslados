@@ -1,14 +1,13 @@
 package com.a4app.develop.traslados;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import com.a4app.develop.traslados.modelo.Lote;
@@ -216,7 +216,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 3 total pages.room vs sqlite
             return tabs.size();
         }
         private void addFragment(TabDetails tab) {
@@ -227,5 +227,18 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         public CharSequence getPageTitle(int position) {
             return tabs.get(position).getTabName();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText( this, "OnStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+
     }
 }
