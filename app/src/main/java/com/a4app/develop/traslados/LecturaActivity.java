@@ -239,6 +239,15 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+      //  BdManager  db = BdManager.getDatabase(this);
+        //BdaoLote bdaoLote = db.bdaoLote();
 
+
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

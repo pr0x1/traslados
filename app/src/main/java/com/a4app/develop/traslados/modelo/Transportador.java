@@ -3,10 +3,7 @@ package com.a4app.develop.traslados.modelo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-
-@Entity(tableName="transportador",primaryKeys = {"codigo","placa"})
+//Entity(tableName="transportador",primaryKeys = {"codigo","placa"})
 public class Transportador implements Parcelable {
     private String codigo;
     private String nombre;
@@ -16,7 +13,7 @@ public class Transportador implements Parcelable {
         // TODO Auto-generated constructor stub
 
     }
-    @Ignore
+   // @Ignore
     public static final Parcelable.Creator<Transportador> CREATOR
             = new Parcelable.Creator<Transportador>() {
         public Transportador createFromParcel(Parcel in) {
