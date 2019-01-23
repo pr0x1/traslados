@@ -1,16 +1,20 @@
 package com.a4app.develop.traslados;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +50,9 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     private CentrosAlmacen centrosAlmacen;
     private Transportador transportador;
     private ArrayList<Lote> lotess;
+    private boolean otroTransporte;
     public static final String LOTE_KEY = "lote_key";
+    private Context contexto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +74,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
        // mViewPager.setAdapter(mSectionsPagerAdapter);
 
         populateViewPager();
+        contexto = getApplicationContext();
 
        //mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
       // tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -91,11 +98,14 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent i = new Intent(this, CentrosActivity.class);
-
                 startActivity(i);
                 return true;
-
             case R.id.action_settings:
+                AsyncTaskOnSaveInstace  task = new AsyncTaskOnSaveInstace();
+                task.execute();
+                Intent a = new Intent(this, CentrosActivity.class);
+                startActivity(a);
+                otroTransporte = true;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -246,17 +256,39 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
        // SharedPreferences preferences = getPreferences(MODE_PRIVATE);
       //  BdManager  db = BdManager.getDatabase(this);
         //BdaoLote bdaoLote = db.bdaoLote();
-
-        BdManager db = BdManager.getDatabase(this);
-        db.bdaoLote().addLote(lotess);
+      if(otroTransporte) {
 
 
-
+      }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        Intent intent = getIntent();
+        String actividadCentros = intent.getStringExtra("centrosAlmacen");
+        if (actividadCentros != null){
+            if(actividadCentros.equalsIgnoreCase("centroActividad")){
+                BdManager db = BdManager.getDatabase(this);
+                lotess = (ArrayList<Lote>)db.bdaoLote().getLotes();
+                centrosAlmacen = db.bdaoCentroAlmacen().getCentroAlmacen();
+                transportador = db.bdaoTransportador().getTransportador();
+                Fragment lector = LectorFragment.newInstance(centrosAlmacen,transportador);
+                Fragment envio = EnvioFragment.newInstance(lotess);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, lector);
+                transaction.replace(R.id.container, envio);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
+
+
+            }
+        }
+
+
+
     }
 
     @Override
@@ -266,4 +298,82 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
 
     }
+    private class AsyncTaskOnSaveInstace extends AsyncTask<Void, Void, Void> {
+
+        private String resp;
+        ProgressDialog progressDialog;
+        boolean tieneDAtos = true;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            BdManager db = BdManager.getDatabase(contexto);
+            db.bdaoLote().addLotes(lotess);
+            db.bdaoCentroAlmacen().addCentroAlmacen(centrosAlmacen);
+            db.bdaoTransportador().addTransportador(transportador);
+            db.close();
+           return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // execution of result of Long time consuming operation
+            Log.i("HiloCentros",result.toString());
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+
+
+
+        }
+    }
+
+    private class AsyncTaskOnRestoreInstacen extends AsyncTask<Void, Void, Void> {
+
+        private String resp;
+        ProgressDialog progressDialog;
+        boolean tieneDAtos = true;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            BdManager db = BdManager.getDatabase(contexto);
+            db.bdaoLote().addLotes(lotess);
+            db.bdaoCentroAlmacen().addCentroAlmacen(centrosAlmacen);
+            db.bdaoTransportador().addTransportador(transportador);
+            db.close();
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // execution of result of Long time consuming operation
+            Log.i("HiloCentros", result.toString());
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+
+
+        }
+    }
+
+
 }

@@ -17,7 +17,7 @@ public interface BdaoLote {
     public List<Lote> getLotes();
 
    @Insert
-    public void addLote(List<Lote> lotes);
+    public void addLotes(List<Lote> lotes);
 
    @Delete
     public void deleteUsers(Lote lote);

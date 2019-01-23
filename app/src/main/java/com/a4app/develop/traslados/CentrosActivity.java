@@ -1,16 +1,22 @@
 package com.a4app.develop.traslados;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 
 import java.util.StringTokenizer;
@@ -20,6 +26,7 @@ public class CentrosActivity extends AppCompatActivity {
     private Context contexto;
     private EditText textCentros;
     private int contador;
+    private Button otroTrans;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -63,6 +70,22 @@ public class CentrosActivity extends AppCompatActivity {
 
             }
         });
+
+
+            otroTrans =  findViewById(R.id.btnOtroTransporte);
+
+            otroTrans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(contexto,LecturaActivity.class);
+                    intent.putExtra("centrosAlmacen","centroActividad");
+                    startActivity(intent);
+                }
+            });
+            validadInfoBd();
+
+
+
     }
     public void goCentrosActivity(CentrosAlmacen centrosAlmacen){
         Intent i = new Intent(contexto, TransporteActivity.class);
@@ -143,7 +166,71 @@ public class CentrosActivity extends AppCompatActivity {
             return false;
         }
     }
+    private void validadInfoBd(){
+        AsyncTaskRunner tarea = new AsyncTaskRunner();
+        tarea.execute();
+
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<Void, Void, Boolean> {
+
+        private String resp;
+        ProgressDialog progressDialog;
+        boolean tieneDAtos = true;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            BdManager db = BdManager.getDatabase(contexto);
+            if(db.bdaoLote().getLotes().size() <=0){
+                tieneDAtos = false;
+                return tieneDAtos;
+
+            }
+            if(db.bdaoTransportador().getTransportador() == null){
+                tieneDAtos = false;
+                return tieneDAtos;
+
+            }
+            if(db.bdaoCentroAlmacen().getCentroAlmacen() == null){
+                tieneDAtos = false;
+                return tieneDAtos;
+            }
+            db.close();
+            return tieneDAtos;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            // execution of result of Long time consuming operation
+            Log.i("HiloCentros",result.toString());
+            if(result.booleanValue()){
+                otroTrans.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
 
 
 
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }
