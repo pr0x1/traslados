@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +31,12 @@ import com.a4app.develop.traslados.modelo.Respuesta;
 import com.a4app.develop.traslados.modelo.RollosService;
 import com.a4app.develop.traslados.modelo.SwipeToDeleteCallback;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,7 +67,7 @@ public class EnvioFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    private ILectorActivity mCallback;
 
 
    private ArrayList<Lote> lotes;
@@ -72,6 +76,7 @@ public class EnvioFragment extends Fragment {
    private LoteAdapter adapter;
    private LinearLayout rolloLayout;
    private Context context;
+   private ProgressBar progressBar;
 
     public EnvioFragment() {
         // Required empty public constructor
@@ -110,6 +115,8 @@ public class EnvioFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vista = inflater.inflate(R.layout.fragment_envio, container, false);
+        progressBar = vista.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         //tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
         rvRollos = (RecyclerView) vista.findViewById(R.id.rvTablaRollos);
         rolloLayout = (LinearLayout) vista.findViewById(R.id.tablaRollosLayaout);
@@ -121,13 +128,22 @@ public class EnvioFragment extends Fragment {
             {
 
                 if(validadConexion()) {
+
+                    OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                            .connectTimeout(2, TimeUnit.MINUTES)
+                            .readTimeout(1, TimeUnit.MINUTES)
+                            .writeTimeout(1, TimeUnit.MINUTES)
+                            .build();
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
+                            .client(okHttpClient)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                     RollosService rollosService = retrofit.create(RollosService.class);
+                    progressBar.setVisibility(View.VISIBLE);
+                   Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
 
-                    Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
+
                     call.enqueue(new Callback<List<Respuesta>>() {
                         @Override
                         public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
@@ -137,6 +153,7 @@ public class EnvioFragment extends Fragment {
                                 Log.i("ApiRestfull", a.getTipo());
                                 Log.i("ApiRestfull", a.getMensaje());
                             }
+                            progressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
                             intent.putParcelableArrayListExtra("respuestas", respuestas);
                             startActivity(intent);
@@ -144,6 +161,8 @@ public class EnvioFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<List<Respuesta>> call, Throwable t) {
+                            Log.i("ApiRestfull", t.getMessage());
+                           // t.printStackTrace();
                             Toast toast = Toast.makeText(context, "Error conexión a SAP", Toast.LENGTH_LONG);
                             toast.show();
                         }
@@ -172,17 +191,17 @@ public class EnvioFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-/*
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof ILectorActivity) {
+            mCallback = (ILectorActivity) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement ILectorActivity");
         }
-    }*/
+    }
 
 /*
     @Override
@@ -223,6 +242,7 @@ public class EnvioFragment extends Fragment {
 
             adapter.addItem(lote, 0);
             calculaKg();
+          mCallback.onLotesActuales(lotes);
 
 
     }
@@ -250,6 +270,7 @@ public class EnvioFragment extends Fragment {
 
                 adapter.removeItem(position);
                 calculaKg();
+                mCallback.onLotesActuales(lotes);
 
 
                 Snackbar snackbar = Snackbar
@@ -261,6 +282,7 @@ public class EnvioFragment extends Fragment {
                         adapter.restoreItem(item, position);
                         rvRollos.scrollToPosition(position);
                         calculaKg();
+                        mCallback.onLotesActuales(lotes);
                     }
                 });
 

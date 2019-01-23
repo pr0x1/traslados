@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import com.a4app.develop.traslados.modelo.Lote;
 import com.a4app.develop.traslados.modelo.Transportador;
@@ -44,6 +45,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     private TabLayout tabLayout;
     private CentrosAlmacen centrosAlmacen;
     private Transportador transportador;
+    private ArrayList<Lote> lotess;
     public static final String LOTE_KEY = "lote_key";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,9 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
                 Intent i = new Intent(this, CentrosActivity.class);
 
                 startActivity(i);
+                return true;
+
+            case R.id.action_settings:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -238,9 +243,12 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+       // SharedPreferences preferences = getPreferences(MODE_PRIVATE);
       //  BdManager  db = BdManager.getDatabase(this);
         //BdaoLote bdaoLote = db.bdaoLote();
+
+        BdManager db = BdManager.getDatabase(this);
+        db.bdaoLote().addLote(lotess);
 
 
 
@@ -249,5 +257,13 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onLotesActuales(ArrayList<Lote> lotes) {
+
+        lotess = lotes;
+
+
     }
 }

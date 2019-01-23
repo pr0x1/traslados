@@ -2,19 +2,25 @@ package com.a4app.develop.traslados.modelo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.support.annotation.NonNull;
 
-//Entity(primaryKeys = {"centroOringen","almacenOrigen,","centroDestino","almacenDestino"},tableName = "centrosAlmacen")
+@Entity(primaryKeys = {"centroOringen","almacenOrigen","centroDestino","almacenDestino"},tableName = "centrosAlmacen")
 public class CentrosAlmacen implements Parcelable {
-
+    @NonNull
     private String centroOringen;
     private String desCentroOrigen;
+    @NonNull
     private String almacenOrigen;
     private String desAlmacenOrigen;
+    @NonNull
     private String centroDestino;
     private String desCentroDestino;
+    @NonNull
     private String almacenDestino;
     private String desAlmacenDestino;
-  //  @Ignore
+    @Ignore
     public static final Parcelable.Creator<CentrosAlmacen> CREATOR
             = new Parcelable.Creator<CentrosAlmacen>() {
         public CentrosAlmacen createFromParcel(Parcel in) {
@@ -25,6 +31,7 @@ public class CentrosAlmacen implements Parcelable {
             return new CentrosAlmacen[size];
         }
     };
+    @Ignore
     private CentrosAlmacen(Parcel in) {
         centroOringen = in.readString();
         desCentroOrigen = in.readString();
@@ -48,6 +55,7 @@ public class CentrosAlmacen implements Parcelable {
         this.desAlmacenDestino = desAlmacenDestino;
 
     }
+    @Ignore
     public CentrosAlmacen(){
 
     }

@@ -2,18 +2,24 @@ package com.a4app.develop.traslados.modelo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.support.annotation.NonNull;
 
-//Entity(tableName="transportador",primaryKeys = {"codigo","placa"})
+@Entity(tableName="transportador",primaryKeys = {"codigo","placa"})
 public class Transportador implements Parcelable {
+    @NonNull
     private String codigo;
+    @NonNull
     private String nombre;
+    @NonNull
     private String placa;
 
     public Transportador() {
         // TODO Auto-generated constructor stub
 
     }
-   // @Ignore
+    @Ignore
     public static final Parcelable.Creator<Transportador> CREATOR
             = new Parcelable.Creator<Transportador>() {
         public Transportador createFromParcel(Parcel in) {

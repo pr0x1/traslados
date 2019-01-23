@@ -1,16 +1,26 @@
 package com.a4app.develop.traslados.modelo;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 
 //Entity(tableName = "lote",primaryKeys = {"numLote","centro","almacen","centro_destino","almacen_destino"})
+@Entity(tableName = "lote",primaryKeys = {"numLote","centro","almacen","centro_destino","almacen_destino"})
 public class Lote implements Parcelable {
+    @NonNull
     private String numLote;
     private String numPedido;
     private String posPedido;
+    @NonNull
     private String centro;
+    @NonNull
     private String centro_destino;
+    @NonNull
     private String almacen;
+    @NonNull
     private String almacen_destino;
     private String material;
     private double cantidad;
@@ -26,7 +36,7 @@ public class Lote implements Parcelable {
     private String despa;
     private String recep;
     private String transportador;
-   // @Ignore
+    @Ignore
     public static final Parcelable.Creator<Lote> CREATOR
             = new Parcelable.Creator<Lote>() {
         public Lote createFromParcel(Parcel in) {

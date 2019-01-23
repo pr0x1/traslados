@@ -1,17 +1,20 @@
 package com.a4app.develop.traslados.bdatos;
 
 import com.a4app.develop.traslados.modelo.Transportador;
-
-//@Dao
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Delete;
+@Dao
 public interface BdaoTransportador {
 
-  //  @Query("SELECT * FROM transportador")
+    @Query("SELECT * FROM transportador")
     public Transportador getTransportador();
 
-    //@Insert
+    @Insert
     public void addTransportador(Transportador transportador);
 
-    //@Delete
+    @Delete
     public void deleteLote(Transportador transportador);
 
 

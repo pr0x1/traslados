@@ -12,6 +12,15 @@
     android:id="@+id/linearRollosLayout"
     tools:context=".EnvioFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_weight="1"
+        android:indeterminate="true" />
+
     <!-- TODO: Update blank fragment layout -->
     <TableLayout
         android:id="@+id/tabEncabezado"
@@ -40,11 +49,12 @@
         </TableRow>
 
     </TableLayout>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_weight="6"
         android:id="@+id/tablaRollosLayaout"
         >
 
