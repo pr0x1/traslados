@@ -59,7 +59,7 @@ public class CentrosActivity extends AppCompatActivity {
                 if(!textoLeido.equals("") && !textoLeido.isEmpty() && textoLeido != null) {
                 centrosAlmacen =  procesaLecturaCentros(textoLeido);
                 goCentrosActivity(centrosAlmacen);
-                   CharSequence text = "Cambiado!After";
+                   CharSequence text = "Etiqueta Leida";
                     int duration = Toast.LENGTH_SHORT;
 
                     Toast toast = Toast.makeText(contexto, text, duration);

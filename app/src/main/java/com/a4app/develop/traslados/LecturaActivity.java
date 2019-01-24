@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
@@ -334,7 +332,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
             TabDetails tab;
             tab = new TabDetails("Lectura", LectorFragment.newInstance(centrosAlmacen,transportador));
             mSectionsPagerAdapter.addFragment(tab);
-            tab = new TabDetails("Traslado", EnvioFragment.newInstance((lotess),"CentrosActivity.class"));
+            tab = new TabDetails("Traslado", EnvioFragment.newInstance(lotess,"CentrosActivity.class"));
             mSectionsPagerAdapter.addFragment(tab);
             mViewPager.setAdapter(mSectionsPagerAdapter);
             tabLayout.setupWithViewPager(mViewPager);

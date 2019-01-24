@@ -24,7 +24,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.Lote;
 import com.a4app.develop.traslados.modelo.LoteAdapter;
 import com.a4app.develop.traslados.modelo.Respuesta;
@@ -55,7 +54,7 @@ public class EnvioFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "lotes";
-    private static final String ARG_PARAM2 = "centrosAlm";
+    private static final String ARG_PARAM2 = "CentrosActivity.class";
     private TableLayout tableLayout;
     private View vista;
 
@@ -123,8 +122,8 @@ public class EnvioFragment extends Fragment {
 
                     OkHttpClient okHttpClient = new OkHttpClient.Builder()
                             .connectTimeout(2, TimeUnit.MINUTES)
-                            .readTimeout(1, TimeUnit.MINUTES)
-                            .writeTimeout(1, TimeUnit.MINUTES)
+                            .readTimeout(2, TimeUnit.MINUTES)
+                            .writeTimeout(2, TimeUnit.MINUTES)
                             .build();
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
@@ -139,21 +138,34 @@ public class EnvioFragment extends Fragment {
                     call.enqueue(new Callback<List<Respuesta>>() {
                         @Override
                         public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
-                            ArrayList<Respuesta> respuestas = (ArrayList<Respuesta>) response.body();
+                           final ArrayList<Respuesta> respuestas = (ArrayList<Respuesta>) response.body();
                             for (Respuesta a : respuestas
                             ) {
                                 Log.i("ApiRestfull", a.getTipo());
                                 Log.i("ApiRestfull", a.getMensaje());
                             }
-                            String texto = getArguments().getString(ARG_PARAM1);
-                            if(texto.equalsIgnoreCase("CentrosActivity.class")){
-                                BdManager db = BdManager.getDatabase(contexto);
-                                db.clearAllTables();
+                            if(getArguments()!= null) {
+                                String texto = getArguments().getString(ARG_PARAM2);
+                                if (texto.equalsIgnoreCase("CentrosActivity.class")) {
+                                    progressBar.setVisibility(View.GONE);
+                                    Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
+                                    intent.putParcelableArrayListExtra("respuestas", respuestas);
+                                    intent.putExtra("cerrarBdatos",true);
+                                    startActivity(intent);
+
+                                }else{
+                                    progressBar.setVisibility(View.GONE);
+                                    Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
+                                    intent.putParcelableArrayListExtra("respuestas", respuestas);
+                                    startActivity(intent);
+                                }
+                            }else{
+                                progressBar.setVisibility(View.GONE);
+                                Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
+                                intent.putParcelableArrayListExtra("respuestas", respuestas);
+                                startActivity(intent);
                             }
-                            progressBar.setVisibility(View.GONE);
-                            Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
-                            intent.putParcelableArrayListExtra("respuestas", respuestas);
-                            startActivity(intent);
+
                         }
 
                         @Override
