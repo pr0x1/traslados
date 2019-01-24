@@ -73,9 +73,10 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         mViewPager = (ViewPager) findViewById(R.id.container);
        // mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        populateViewPager();
-        contexto = getApplicationContext();
+       //populateViewPager();
 
+        contexto = getApplicationContext();
+        revisaBd();
        //mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
       // tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -103,8 +104,6 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
             case R.id.action_settings:
                 AsyncTaskOnSaveInstace  task = new AsyncTaskOnSaveInstace();
                 task.execute();
-                Intent a = new Intent(this, CentrosActivity.class);
-                startActivity(a);
                 otroTransporte = true;
                 return true;
             default:
@@ -139,40 +138,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
            Snackbar.make(mViewPager, "Lote ya cargado", Snackbar.LENGTH_LONG)
                    .setAction("Action", null).show();
        }
-       /* Bundle args = new Bundle();
-        args.putParcelable(LOTE_KEY,lote);
-        envioFragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.commit();*/
 
-
-
-       /* if (articleFrag != null) {
-            // If article frag is available, we're in two-pane layout...
-
-            // Call a method in the ArticleFragment to update its content
-            articleFrag.updateArticleView(position);
-
-        } else {
-            // If the frag is not available, we're in the one-pane layout and must swap frags...
-
-            // Create fragment and give it an argument for the selected article
-            ArticleFragment newFragment = new ArticleFragment();
-            Bundle args = new Bundle();
-            args.putInt(ArticleFragment.ARG_POSITION, position);
-            newFragment.setArguments(args);
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-
-            // Commit the transaction
-            transaction.commit();
-        }
-*/
     }
 
     /**
@@ -247,7 +213,15 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText( this, "OnStop", Toast.LENGTH_SHORT).show();
+         new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    BdManager db = BdManager.getDatabase(contexto);
+                    db.close();
+                    return null;
+                }
+            };
+
     }
 
     @Override
@@ -269,17 +243,9 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         String actividadCentros = intent.getStringExtra("centrosAlmacen");
         if (actividadCentros != null){
             if(actividadCentros.equalsIgnoreCase("centroActividad")){
-                BdManager db = BdManager.getDatabase(this);
-                lotess = (ArrayList<Lote>)db.bdaoLote().getLotes();
-                centrosAlmacen = db.bdaoCentroAlmacen().getCentroAlmacen();
-                transportador = db.bdaoTransportador().getTransportador();
-                Fragment lector = LectorFragment.newInstance(centrosAlmacen,transportador);
-                Fragment envio = EnvioFragment.newInstance(lotess);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, lector);
-                transaction.replace(R.id.container, envio);
-                transaction.addToBackStack(null);
-                transaction.commit();
+
+               AsyncTaskOnRestoreInstace taskOnRestoreInstace = new AsyncTaskOnRestoreInstace();
+               taskOnRestoreInstace.execute();
 
 
 
@@ -306,19 +272,26 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
         @Override
         protected Void doInBackground(Void... params) {
-            BdManager db = BdManager.getDatabase(contexto);
-            db.bdaoLote().addLotes(lotess);
+           BdManager db = BdManager.getDatabase(contexto);
+            db.clearAllTables();
+            for (Lote lot:lotess
+            ) {
+                db.bdaoLote().addLotes(lot);
+
+            }
             db.bdaoCentroAlmacen().addCentroAlmacen(centrosAlmacen);
             db.bdaoTransportador().addTransportador(transportador);
-            db.close();
-           return null;
+
+            return null;
         }
 
 
         @Override
         protected void onPostExecute(Void result) {
             // execution of result of Long time consuming operation
-            Log.i("HiloCentros",result.toString());
+            Log.i("HiloCentros","Ok");
+            Intent a = new Intent(contexto, CentrosActivity.class);
+            startActivity(a);
 
         }
 
@@ -337,7 +310,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         }
     }
 
-    private class AsyncTaskOnRestoreInstacen extends AsyncTask<Void, Void, Void> {
+    private class AsyncTaskOnRestoreInstace extends AsyncTask<Void, Void, Void> {
 
         private String resp;
         ProgressDialog progressDialog;
@@ -345,11 +318,11 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
         @Override
         protected Void doInBackground(Void... params) {
+
             BdManager db = BdManager.getDatabase(contexto);
-            db.bdaoLote().addLotes(lotess);
-            db.bdaoCentroAlmacen().addCentroAlmacen(centrosAlmacen);
-            db.bdaoTransportador().addTransportador(transportador);
-            db.close();
+            lotess = (ArrayList<Lote>)db.bdaoLote().getLotes();
+            centrosAlmacen = db.bdaoCentroAlmacen().getCentroAlmacen();
+            transportador = db.bdaoTransportador().getTransportador();
             return null;
         }
 
@@ -357,7 +330,14 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         @Override
         protected void onPostExecute(Void result) {
             // execution of result of Long time consuming operation
-            Log.i("HiloCentros", result.toString());
+            Log.i("HiloCentros", "Ok");
+            TabDetails tab;
+            tab = new TabDetails("Lectura", LectorFragment.newInstance(centrosAlmacen,transportador));
+            mSectionsPagerAdapter.addFragment(tab);
+            tab = new TabDetails("Traslado", EnvioFragment.newInstance((lotess),"CentrosActivity.class"));
+            mSectionsPagerAdapter.addFragment(tab);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            tabLayout.setupWithViewPager(mViewPager);
 
         }
 
@@ -372,6 +352,20 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         protected void onProgressUpdate(Void... text) {
 
 
+        }
+    }
+    public void revisaBd(){
+        Intent intent = getIntent();
+        String actividadCentros = intent.getStringExtra("centrosAlmacen");
+        if (actividadCentros != null){
+            if(actividadCentros.equalsIgnoreCase("centroActividad")){
+                AsyncTaskOnRestoreInstace taskOnRestoreInstace = new AsyncTaskOnRestoreInstace();
+                taskOnRestoreInstace.execute();
+            }else{
+                populateViewPager();
+            }
+        }else{
+            populateViewPager();
         }
     }
 

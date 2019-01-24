@@ -2,6 +2,7 @@ package com.a4app.develop.traslados;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import com.a4app.develop.traslados.modelo.Transportador;
 
@@ -148,5 +150,19 @@ public class TransporteActivity extends AppCompatActivity {
 
     public void setPlaca(String placa) {
         this.placa = placa;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+                new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    BdManager db = BdManager.getDatabase(contexto);
+                    db.close();
+                    return null;
+                }
+            };
+
     }
 }

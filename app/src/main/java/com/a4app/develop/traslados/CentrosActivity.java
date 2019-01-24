@@ -195,8 +195,7 @@ public class CentrosActivity extends AppCompatActivity {
                 tieneDAtos = false;
                 return tieneDAtos;
             }
-            db.close();
-            return tieneDAtos;
+           return tieneDAtos;
         }
 
 
@@ -232,5 +231,19 @@ public class CentrosActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                BdManager db = BdManager.getDatabase(contexto);
+                db.close();
+                return null;
+            }
+        };
     }
 }

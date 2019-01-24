@@ -9,15 +9,14 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Pausar Transporte</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="textoCol1">Lote</string>
     <string name="textoCol2">Material</string>
     <string name="textoCol3">Peso</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="otroTransporte">Transporte anterior</string>
+    <string name="otroTransporte">Reanudar transporte anterior</string>
 
 
 </resources>

@@ -24,6 +24,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.Lote;
 import com.a4app.develop.traslados.modelo.LoteAdapter;
 import com.a4app.develop.traslados.modelo.Respuesta;
@@ -54,7 +55,7 @@ public class EnvioFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "lotes";
-    //private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM2 = "centrosAlm";
     private TableLayout tableLayout;
     private View vista;
 
@@ -73,7 +74,7 @@ public class EnvioFragment extends Fragment {
    private RecyclerView mAdapter;
    private LoteAdapter adapter;
    private LinearLayout rolloLayout;
-   private Context context;
+   private Context contexto;
    private ProgressBar progressBar;
 
     public EnvioFragment() {
@@ -82,11 +83,11 @@ public class EnvioFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static EnvioFragment newInstance(ArrayList<Lote> lotes) {
+    public static EnvioFragment newInstance(ArrayList<Lote> lotes, String centros) {
         EnvioFragment fragment = new EnvioFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PARAM1, lotes);
-        //args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM2, centros);
         fragment.setArguments(args);
         return fragment;
     }
@@ -144,6 +145,11 @@ public class EnvioFragment extends Fragment {
                                 Log.i("ApiRestfull", a.getTipo());
                                 Log.i("ApiRestfull", a.getMensaje());
                             }
+                            String texto = getArguments().getString(ARG_PARAM1);
+                            if(texto.equalsIgnoreCase("CentrosActivity.class")){
+                                BdManager db = BdManager.getDatabase(contexto);
+                                db.clearAllTables();
+                            }
                             progressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
                             intent.putParcelableArrayListExtra("respuestas", respuestas);
@@ -153,13 +159,13 @@ public class EnvioFragment extends Fragment {
                         @Override
                         public void onFailure(Call<List<Respuesta>> call, Throwable t) {
                             Log.i("ApiRestfull", t.getMessage());
-                           // t.printStackTrace();
-                            Toast toast = Toast.makeText(context, "Error conexión a SAP", Toast.LENGTH_LONG);
+
+                            Toast toast = Toast.makeText(contexto, "Error conexión a SAP", Toast.LENGTH_LONG);
                             toast.show();
                         }
                     });
                 }else{
-                    Toast toast = Toast.makeText(context, "Error de Conexion a red", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(contexto, "Error de Conexion a red", Toast.LENGTH_LONG);
                     toast.show();
                 }
 
@@ -174,9 +180,10 @@ public class EnvioFragment extends Fragment {
         // Attach the adapter to the recyclerview to populate items
         rvRollos.setAdapter(adapter);
         // Set layout manager to position the items
-        context = vista.getContext();
-        rvRollos.setLayoutManager(new LinearLayoutManager(context));
+        contexto = vista.getContext();
+        rvRollos.setLayoutManager(new LinearLayoutManager(contexto));
         enableSwipeToDeleteAndUndo();
+        calculaKg();
         return vista;
     }
 
@@ -255,7 +262,7 @@ public class EnvioFragment extends Fragment {
     }
     private void enableSwipeToDeleteAndUndo() {
 
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(context) {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(contexto) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -307,7 +314,7 @@ public class EnvioFragment extends Fragment {
 
     public boolean validadConexion() {
         ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
