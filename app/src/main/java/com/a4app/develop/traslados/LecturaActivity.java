@@ -28,29 +28,71 @@ import com.a4app.develop.traslados.modelo.Transportador;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Esta clase es la clase pricipal de la ventana de lectura, la ventana de lectura está dividad en dos Tabs, lectura y envio
+ * cada uno de estos tabs está representado por un {@link Fragment}, estos Fragments tienen comportamientos independientes de su clase Controladora
+ * el fragment para el tab Lectura, se representa mediante la clase {@link LectorFragment} y la clase para el tab envio se llama {@link EnvioFragment}
+ *
+ * Está clase implementa la interfaz {@link ILectorActivity} que a su vez tiene los metodos onLoteCreate y onLotesActuales, con estos métodos
+ * la clase controladora LecturaActivity se encarga de comunicarse con cada unos de los fragments y viceversa.
+ *
+ * Aquí tambien se define la barra de tareas de la ventana de lectura la cual contiene un boton para regresar al inicio de la aplicación
+ * y un menú en donde se encuentra la opción para suspender el transporte e iniciar otro. Esta funcionalidad se require cuando
+ * es necesario  pausar el transporte actual para poder ir a realizar otro transporte que saldrá más rápido, estos casos
+ * se dan más cuando se trata de transportes a Corame y se necesita luego cargar un Litofan, Solo se puede tener un transporte suspendido
+ *
+ *
+ *
+ * @author Yamit Huertas.
+ * @version 1.0
+ */
 public class LecturaActivity extends AppCompatActivity implements ILectorActivity {
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * EL {@link android.support.v4.view.PagerAdapter} provee
+     * fragmentos para cada una de las secciones. Se  usa un herencia del
+     * {@link FragmentPagerAdapter} , el cual permite tener las secciones
+     * en memoria sabiendo que esto es muy pesado, pero se hace de la mejor formar
+     * utilizando   {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     *  {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    /**
+     * Layou para la gestión de los Tabs
+     */
+
     private TabLayout tabLayout;
+    /**
+     * Referencia al objeto centroAlmacen que contiene la información de la primera lectura de QR
+     */
     private CentrosAlmacen centrosAlmacen;
+    /**
+     * Referencia al objeto transportador que se creó despues de la lectura del segundo QR contiene la información
+     * del transportador y su placa
+     */
     private Transportador transportador;
+    /**
+     * Colección de los lotes o rollos leidos.
+     */
     private ArrayList<Lote> lotess;
+    /**
+     * variable para saber si se pauso un transporte
+     */
     private boolean otroTransporte;
     public static final String LOTE_KEY = "lote_key";
+    /**
+     * Contiene el contexto de la aplicación.
+     */
     private Context contexto;
+
+    /**
+     * Inicializa los  atributos de la actividad
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +123,11 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
     }
 
-
+    /**
+     * Carga el layout del Menú utilizado para pausar el transporte actual
+     * @param menu
+     * @return true en todos los casos
+     */
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,6 +135,12 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         return true;
     }
 
+    /**
+     * Listener de la barra de herramientas que permite saber cuando se hizo clic en el boton de regreso o en el boton de pausar
+     * el transporte.
+     * @param item  item del menu seleccionado
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -112,7 +164,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
 
     /**
-     * Creates the fragments and sets it to ViewPager
+     * Crea los fragmentos y los ingresa dentro del viewPagerAdapter y este a su vez se registra dentro del Tablayout
      */
     private void populateViewPager() {
 
@@ -127,6 +179,12 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
     }
 
+    /**
+     * Metodo para comunicar el fragment de lectura con el fragment de envio, aqui se recibe  cada lote que se lee
+     * dentro del fragment lectura y se le notifica al {@link EnvioFragment} para que lo resgistre el el listado de lotes
+     * disponibles
+     * @param lote
+     */
     @Override
     public void onLoteCreated(Lote lote) {
        // The user selected the headline of an article from the HeadlinesFragment
@@ -165,6 +223,13 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
             return fragment;
         }
 
+        /**
+         * Retorna la vista que contiene el fragment
+         * @param inflater
+         * @param container
+         * @param savedInstanceState
+         * @return
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -180,12 +245,24 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        /**
+         * Lista de Objetos {@link TabDetails} que contiene la información de cada Tab
+         */
         private final List<TabDetails> tabs = new ArrayList<>();
 
+        /**
+         * Contrusctor
+         * @param fm
+         */
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        /**
+         * Devuelve el fragment para la posición recibida como parámetro
+         * @param position
+         * @return {@link Fragment}
+         */
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
@@ -193,21 +270,38 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
             return  tabs.get(position).getFragment();
         }
 
+        /**
+         * Retorna la cantidad de tabs  cargados
+         * @return int Cantidad de tabs
+         */
         @Override
         public int getCount() {
             // Show 3 total pages.room vs sqlite
             return tabs.size();
         }
+
+        /**
+         * Adiciona un objeto {@link TabDetails} dentro de la colección de tabs
+         * @param tab
+         */
         private void addFragment(TabDetails tab) {
             tabs.add(tab);
         }
 
+        /**
+         * Retorna el texto del tab que se encuentra en la posición enviada como parámetro
+         * @param position
+         * @return {@link CharSequence} Nombre del tab
+         */
         @Override
         public CharSequence getPageTitle(int position) {
             return tabs.get(position).getTabName();
         }
     }
-
+    /**
+     * Este metodo es llamado cuando la actividad o ventana es detenida, esto pasa cuando la actividad ya no es visible para el usuario
+     * en este caso se cierra la conexión a la base de datos.
+     */
     @Override
     protected void onStop() {
         super.onStop();

@@ -23,6 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ * Clase que hereda de {@link Fragment} y representa el frament que lee la etiqueta del rollo.
+ * @author Yamit Huertas.
+ * @version 1.0
+ */
 public class LectorFragment extends Fragment  {
     private OnFragmentInteractionListener mListener;
     private ILectorActivity mCallback;
