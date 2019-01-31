@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
 import com.a4app.develop.traslados.modelo.Lote;
+import com.a4app.develop.traslados.modelo.TabDetails;
 import com.a4app.develop.traslados.modelo.Transportador;
 
 import java.util.ArrayList;

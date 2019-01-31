@@ -117,6 +117,11 @@ public class LectorFragment extends Fragment  {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    /**
+     * Este metodo se lanza cuando se adiciona el fragment a la vista principal, al realizar esto
+     * se valida que la vista principal haya implmentado la interfaz {@link ILectorActivity}
+     * @param context conexto
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
