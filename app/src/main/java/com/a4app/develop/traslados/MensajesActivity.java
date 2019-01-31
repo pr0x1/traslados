@@ -16,13 +16,40 @@ import com.a4app.develop.traslados.modelo.RespuestaAdapter;
 
 import java.util.ArrayList;
 
-
+/**
+ * Clase para  el manejo de la actividad  MensajeActivity
+ * @author Yamit Huertas
+ * @version 1.0
+ *
+ *
+ */
 public class MensajesActivity extends AppCompatActivity {
+    /**
+     * RecyclerView para visualizar los mensajes en la lista de mensajes
+     */
     private RecyclerView rvRespuestas;
+    /**
+     * Listado de respuestas obtenidas del restApi
+     */
     private ArrayList<Respuesta> respuestas;
+    /**
+     * Adapter que gestiona la craeción, adición, y eliminación de respuestas en el listado de respuetas.
+     */
     private RespuestaAdapter adapter;
+    /**
+     * Variable utilizada como bandera para saber cuando cerrar la base de datos.
+     */
     private boolean cerrarBd;
+    /**
+     * Contexto de la vista actual
+     */
     private Context contexto;
+
+
+    /**
+     * Se inicializan las variables y compoenentes de la vista
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +69,10 @@ public class MensajesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Se encarga de obtener el listado de respuestas enviados por la actividad {@link LecturaActivity} y {@link EnvioFragment}
+     * tambien se obtiene la variable bandera para saber si se debe o no cerrar la conexión a la base de datos.
+     */
     public void cargaIntent(){
         Intent intent = getIntent();
         if(intent != null) {
