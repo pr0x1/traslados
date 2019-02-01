@@ -12,6 +12,11 @@ import com.a4app.develop.traslados.R;
 
 import java.util.List;
 
+/**
+ * Clase adapter para la conexion de datos entre la vista y las respuestas
+ * @author Yamit Huertas.
+ * @version 1.0
+ */
 public class RespuestaAdapter extends
         RecyclerView.Adapter<RespuestaAdapter.ViewHolder> {
 
@@ -109,15 +114,7 @@ public class RespuestaAdapter extends
             // Attach a click listener to the entire row view
             //itemView.setOnClickListener(this);
         }
-    /*    @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition(); // gets item position
-            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                Contact contact = getmContacts().get(position) ;
-                // We can access the data within the views
-           //     Toast.makeText(context, nameTextView.getText(), Toast.LENGTH_SHORT).show();
-            }
-        }*/
+
 
     }
 

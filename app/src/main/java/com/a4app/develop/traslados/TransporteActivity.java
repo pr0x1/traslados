@@ -52,13 +52,13 @@ public class TransporteActivity extends AppCompatActivity {
      */
     private String placa;
     /**
-     * Objeto de la clase {@Link CentrosAlmacen} que viene compartida desde la actividadad {@Link CentrosActivity}
+     * Objeto de la clase {@link CentrosAlmacen} que viene compartida desde la actividadad {@link CentrosActivity}
      */
     private CentrosAlmacen centroOrigen;
 
     /**
      * Inicializa los valores de la clase.
-     * Carga la información enviada desde la actividad {@Link CentrosActivity} en un [@Link {@link Intent}
+     * Carga la información enviada desde la actividad {@link CentrosActivity} en un {@link Intent}
      * Inicializa el  listener para el evento {@link TextWatcher#onTextChanged(CharSequence, int, int, int)} que se encarga
      * de manejar el cambio de texto cuando se lee la etiqueta y así proceder con la información leida.
      *
@@ -122,7 +122,7 @@ public class TransporteActivity extends AppCompatActivity {
      * Aquí se crea el objeto transportador que contiene la información de la etiqueta de transporte leida,
      * es decir el nombre y código del transportador, la placa. posteriormente se crea un Intent en donde se carga
      * este objeto y nuevamente la información de la primera actividad CentrosActivity para que sea leida por la siguiente acitividad
-     * del flujo llamada {@Link LecturaActivity}
+     * del flujo llamada {@link LecturaActivity}
      */
     public void goLecturaActivity(){
         Intent i = new Intent(contexto, LecturaActivity.class);

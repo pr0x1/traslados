@@ -91,6 +91,13 @@ public class MensajesActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * Manejador de eventos para el boton regresar, si la bandera cerrarBd  es verdadero entonces se llama al objeto {@link AsyncTaskCloseBd}
+     * que cierra la conexión de la base de datos, si es falso entonces solo se devuelve a la actividad inicial {@link CentrosActivity}
+     * @param item
+     * @return true
+     */
    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -113,6 +120,10 @@ public class MensajesActivity extends AppCompatActivity {
 
         }
     }
+
+    /**
+     * Retornar a la actividad inicial {@link CentrosActivity}
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -120,12 +131,21 @@ public class MensajesActivity extends AppCompatActivity {
         startActivity(i);
 
     }
+
+    /**
+     * Clase interna que hereda de {@link AsyncTask} para cerrar la conexión de la base de datos
+     */
     private class AsyncTaskCloseBd extends AsyncTask<Void, Void, Void> {
 
         private String resp;
         ProgressDialog progressDialog;
         boolean tieneDAtos = true;
 
+        /**
+         * Se hace el llamado a la conexión activa, luego se borra toda la información de las tablas y por ultimo se cierra la base de datos.
+         * @param params
+         * @return Void
+         */
         @Override
         protected Void doInBackground(Void... params) {
 
@@ -135,7 +155,10 @@ public class MensajesActivity extends AppCompatActivity {
             return null;
         }
 
-
+        /**
+         * Retorna la aplicación a la actividad inicial {@link CentrosActivity} cuando termina la actividad de fondo cerrando la base de datos.
+         * @param result
+         */
         @Override
         protected void onPostExecute(Void result) {
             // execution of result of Long time consuming operation

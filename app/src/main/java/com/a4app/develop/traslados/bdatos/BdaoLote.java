@@ -10,18 +10,36 @@ import com.a4app.develop.traslados.modelo.Lote;
 
 import java.util.List;
 
-
+/**
+ * Inteface que gestiona la tabla lote
+ */
 @Dao
 public interface BdaoLote {
+    /**
+     * Retorna todos los registros de la tabla lote
+     * @return
+     */
    @Query("SELECT * FROM lote")
     public List<Lote> getLotes();
 
+    /**
+     * Inserta un registro en la tabla lote
+     * @param lote
+     */
    @Insert
     public void addLotes(Lote lote);
 
+    /**
+     * Borra el registro recibido por parametro de la tabla lote
+     * @param lote
+     */
    @Delete
     public void deleteUsers(Lote lote);
 
+    /**
+     * Borra una colección de lotes de la tabla lote
+     * @param lotes
+     */
    @Delete
     public void deleteUsers(List<Lote> lotes);
 
