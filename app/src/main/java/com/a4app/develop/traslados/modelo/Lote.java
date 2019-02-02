@@ -6,35 +6,104 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-
+/**
+ * Clase que hace referencia al objeto Lote implmenta {@link Parcelable} para poder enviarla entre
+ * los Intents
+ * @author Yamit Huertas
+ * @version 1.0
+ */
 //Entity(tableName = "lote",primaryKeys = {"numLote","centro","almacen","centro_destino","almacen_destino"})
 @Entity(tableName = "lote",primaryKeys = {"numLote","centro","almacen","centro_destino","almacen_destino"})
 public class Lote implements Parcelable {
+    /**
+     * Número de rollo o lote.
+     */
     @NonNull
     private String numLote;
+    /**
+     * Número de pedido.
+     */
     private String numPedido;
+    /**
+     * Posición del pedido.
+     */
     private String posPedido;
+
+    /**
+     * Centro origen.
+     */
     @NonNull
     private String centro;
+    /**
+     * Centro destino.
+     */
     @NonNull
     private String centro_destino;
+    /**
+     * Almacén origen.
+     */
     @NonNull
     private String almacen;
+    /**
+     * Almacén destino.
+     */
     @NonNull
     private String almacen_destino;
+    /**
+     * Código del material
+     */
     private String material;
+    /**
+     * Peso del lote o rollo.
+     */
     private double cantidad;
+    /**
+     * Unidad de medida del peso.
+     */
     private String unidad_medida;
+    /**
+     * Cliente del lote o rollo.
+     */
     private String cliente;
+    /**
+     * Fecha de salida del rollo.
+     */
     private String fecha_salida;
+    /**
+     * Número de entrega en donde está el rollo.
+     */
     private String entrega;
+    /**
+     * Orden de compra en donde está rollo o lote .
+     */
     private String ordenCompra;
+    /**
+     * Número del transporte en donde se despacho el rollo.
+     */
     private String transporte;
+    /**
+     * Estado del rollo
+     */
     private String estado;
+    /**
+     * Placa del  vehiculo en donde va el lote o rollo.
+     */
     private String placa;
+    /**
+     * fecha en la que se hizo el registro de la salida.
+     */
     private String fecha_registro;
+    /**
+     * Indica si fue despachado.
+     */
     private String despa;
+    /**
+     * Indica si fue recibido
+     */
     private String recep;
+    /**
+     * Número empresa transportadora
+     */
     private String transportador;
     @Ignore
     public static final Parcelable.Creator<Lote> CREATOR

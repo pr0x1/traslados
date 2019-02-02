@@ -6,19 +6,49 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.support.annotation.NonNull;
 
+/**
+ * Clase que representa al objeto Centro Almacen, este objeto hace referencia a los centros de salida
+ * origen y sus respectivos almacenes
+ * @author Yamit Huertas.
+ * @version 1.0
+ */
 @Entity(primaryKeys = {"centroOringen","almacenOrigen","centroDestino","almacenDestino"},tableName = "centrosAlmacen")
 public class CentrosAlmacen implements Parcelable {
+    /**
+     * Centro desde donde se traslada el rollo o lote
+     */
     @NonNull
     private String centroOringen;
+    /**
+     * Descripción del centro origen
+     */
     private String desCentroOrigen;
+    /**
+     * Almacén desde donde se traslada el rollo o lote
+     */
     @NonNull
     private String almacenOrigen;
+    /**
+     * Descripción almacen Origen
+     */
     private String desAlmacenOrigen;
+    /**
+     * Centro que recibe el traslado
+     */
     @NonNull
     private String centroDestino;
+    /**
+     * Descripción del centro destino
+     */
     private String desCentroDestino;
+    /**
+     * Almacen que recibe el traslado
+     */
     @NonNull
     private String almacenDestino;
+    /**
+     * Descripción del almacen Destino
+     */
     private String desAlmacenDestino;
     @Ignore
     public static final Parcelable.Creator<CentrosAlmacen> CREATOR

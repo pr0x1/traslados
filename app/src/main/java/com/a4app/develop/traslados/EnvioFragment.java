@@ -43,37 +43,58 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EnvioFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EnvioFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Clase que hereda de {@link Fragment} y representa el frament que envía la etiqueta del rollo.
+ * @author Yamit Huertas.
+ * @version 1.0
  */
 public class EnvioFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    /**
+     * Cadena para obtener los lotes del Inten
+     */
     private static final String ARG_PARAM1 = "lotes";
+    /**
+     * Cadena para saber si fue llamada esta actividade desde la actividad centros
+     */
     private static final String ARG_PARAM2 = "CentrosActivity.class";
+    /**
+     * Table Layout, en donde se muestra el encabezado de la lista, es decir los nombres de las columnas, rollo, material y peso
+     */
     private TableLayout tableLayout;
-    private View vista;
+    /**
+     * Hace referencia al objeto Vista de la actividad.
+     */
+  private View vista;
+  private OnFragmentInteractionListener mListener;
+    /**
+     * Hace a la intefaz IlectorActivity utilizada para la comunicación entre Fragments.
+     */
+  private ILectorActivity mCallback;
 
-
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-    private ILectorActivity mCallback;
-
-
+    /**
+     * Listado de lotes que se estan cargando
+     */
    private ArrayList<Lote> lotes;
+    /**
+     * Recycler View que gestiona la visibilidad de los rollos en en listado.
+     */
    private RecyclerView rvRollos;
-   private RecyclerView mAdapter;
+    /**
+     * Hace referencia al adapter que gestiona los objetos lote dentro del listado
+     */
    private LoteAdapter adapter;
+    /**
+     * Hace referencia al LinearLayout que contiene el tab de traslados
+     */
    private LinearLayout rolloLayout;
+    /**
+     * Hace referencia al contexto de la aplicación.
+     */
    private Context contexto;
+    /**
+     * Hace referencia al progressBar que se activa cuando se hace clic en descargar
+     */
    private ProgressBar progressBar;
 
     public EnvioFragment() {
@@ -81,7 +102,9 @@ public class EnvioFragment extends Fragment {
     }
 
 
-    // TODO: Rename and change types and number of parameters
+    /**
+     * Generador de Objetos EnvioFrament.
+     */
     public static EnvioFragment newInstance(ArrayList<Lote> lotes, String centros) {
         EnvioFragment fragment = new EnvioFragment();
         Bundle args = new Bundle();
@@ -90,7 +113,9 @@ public class EnvioFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    /**
+     * Inicializar el listado de lotes cuando se carga la vista del tab
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +125,21 @@ public class EnvioFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Inicializar las diferentes variables una vez se carga el fragment.
+     * Aquí, se define el listener para el boton transportar, este listener va reaalizar lo siguiente:
+     * al presionar el botón de transportar se valida que haya conexión a red.
+     * una vez validado lo anterior, se crea un objeto OkHttoClient que controla la conexión HTTP al servicio
+     * se definen 3 minutos, de espéra hasta agotar el intento de conexión.
+     *
+     *Se crea un objeto Retrofit que realiza el llamado al restAPi aquí se define la url de conexión.
+     * cuando el restApi responde se utilizan dos metodos del Retrofit para controlar la respuesta que son:
+     * onResponse  y onFailure, en el onResponse se maneja la logica para activar la barra de progreso y desactivarla cuando termina de esperar
+     * una vez responde se crea un objeto Intent que será el que realiza el llamado a la actividad Respuesta, enviando un listado con las respuestas
+     * a mostrar.
+     * en el metodo onFailure se muestra un mensaje que indica que hubo problemas de conexión.
+     *
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -121,9 +160,9 @@ public class EnvioFragment extends Fragment {
                 if(validadConexion()) {
 
                     OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                            .connectTimeout(2, TimeUnit.MINUTES)
-                            .readTimeout(2, TimeUnit.MINUTES)
-                            .writeTimeout(2, TimeUnit.MINUTES)
+                            .connectTimeout(3, TimeUnit.MINUTES)
+                            .readTimeout(3, TimeUnit.MINUTES)
+                            .writeTimeout(3, TimeUnit.MINUTES)
                             .build();
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
@@ -139,11 +178,11 @@ public class EnvioFragment extends Fragment {
                         @Override
                         public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
                            final ArrayList<Respuesta> respuestas = (ArrayList<Respuesta>) response.body();
-                            for (Respuesta a : respuestas
+                          /*  for (Respuesta a : respuestas
                             ) {
                                 Log.i("ApiRestfull", a.getTipo());
                                 Log.i("ApiRestfull", a.getMensaje());
-                            }
+                            }*/
                             if(getArguments()!= null) {
                                 String texto = getArguments().getString(ARG_PARAM2);
                                 if (texto.equalsIgnoreCase("CentrosActivity.class")) {
@@ -206,6 +245,13 @@ public class EnvioFragment extends Fragment {
         }
     }
 
+    /**
+     * Este metodo se lanza cuando se adiciona el fragment a la vista principal, al realizar esto
+     * se valida que la vista principal haya implmentado la interfaz {@link ILectorActivity}
+     * @param context conexto
+     */
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -249,6 +295,10 @@ public class EnvioFragment extends Fragment {
 
     }
 
+    /**
+     * Adiciona el lote que se lee desde la etiqueta al listado de lotes  cargados.
+     * @param lote
+     */
     public void populateTable(Lote lote){
 
         // Initialize contacts
@@ -260,6 +310,10 @@ public class EnvioFragment extends Fragment {
 
 
     }
+
+    /**
+     * Realiza el calculo del total de los Kg cargados
+     */
     public void calculaKg(){
         String kg = "";
         double kgd = 0;
@@ -272,6 +326,11 @@ public class EnvioFragment extends Fragment {
         kilosText.setText(kg);
 
     }
+
+    /**
+     * se crea un objeto {@link SwipeToDeleteCallback} que controla el gesto de deslizar el dedo de izquierda a derecha sobre la celda a borrar
+     * con ellos se borrar el lote al que se le realizó el gesto
+     */
     private void enableSwipeToDeleteAndUndo() {
 
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(contexto) {
@@ -324,6 +383,10 @@ public class EnvioFragment extends Fragment {
         return false;
     }
 
+    /**
+     * Valida si el lector esta conectado a la red.
+     * @return true si está conectado, false si no está conectado
+     */
     public boolean validadConexion() {
         ConnectivityManager cm =
                 (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
