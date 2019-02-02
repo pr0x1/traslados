@@ -36,7 +36,7 @@ public class CentrosActivity extends AppCompatActivity {
      */
     private CentrosAlmacen centrosAlmacen;
     /**
-     * Objeto contexto de la actividad
+     * Objeto contexto de la actividad.
      */
     private Context contexto;
     /**
@@ -44,11 +44,11 @@ public class CentrosActivity extends AppCompatActivity {
      */
     private EditText textCentros;
     /**
-     * contador para saber la cantidad de palabras o tokens leidas en la etiqueta
+     * contador para saber la cantidad de palabras o tokens leidas en la etiqueta.
      */
     private int contador;
     /**
-     *Boton para rediccionar a la actividad {@link LecturaActivity} cuando se haya pausado un transporte
+     *Boton para rediccionar a la actividad {@link LecturaActivity} cuando se haya pausado un transporte.
      */
     private Button otroTrans;
 
