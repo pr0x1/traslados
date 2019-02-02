@@ -172,8 +172,7 @@ public class EnvioFragment extends Fragment {
                     RollosService rollosService = retrofit.create(RollosService.class);
                     progressBar.setVisibility(View.VISIBLE);
                    Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
-
-
+                   // Tesxprueba
                     call.enqueue(new Callback<List<Respuesta>>() {
                         @Override
                         public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
