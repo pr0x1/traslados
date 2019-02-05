@@ -97,7 +97,7 @@ public class CentrosActivity extends AppCompatActivity {
                 String textoLeido  = s.toString();
                 if(!textoLeido.equals("") && !textoLeido.isEmpty() && textoLeido != null) {
                 centrosAlmacen =  procesaLecturaCentros(textoLeido);
-                goCentrosActivity(centrosAlmacen);
+                goCentrosActivity(centrosAlmacen,textoLeido);
                    CharSequence text = "Etiqueta Leida";
                     int duration = Toast.LENGTH_SHORT;
 
@@ -133,10 +133,10 @@ public class CentrosActivity extends AppCompatActivity {
      * transporteActivity
      * @param centrosAlmacen the centros almacen
      */
-    public void goCentrosActivity(CentrosAlmacen centrosAlmacen){
+    public void goCentrosActivity(CentrosAlmacen centrosAlmacen,String lectura){
         Intent i = new Intent(contexto, TransporteActivity.class);
 
-        if (validaCampos(centrosAlmacen)) {
+        if (validaCampos(lectura)) {
             i.putExtra("centrosAlm", centrosAlmacen);
             startActivity(i);
         } else{
@@ -214,16 +214,20 @@ public class CentrosActivity extends AppCompatActivity {
 
     /**Valida Campos
      * Valida que la etiqueta leida contiene los campos necesarios
-     * @param centrosAlmacen
+     * @param lectura
      * @return true si cumple false en caso contrario
      */
-    private boolean validaCampos(CentrosAlmacen centrosAlmacen){
-        if(centrosAlmacen!=null) {
-            if(contador<8){
-                return false;
-            }else{
+    private boolean validaCampos(String lectura){
+        if(lectura!=null) {
+            StringTokenizer token = new StringTokenizer(lectura, "#");
+            int numtokens = token.countTokens();
+            if(numtokens == 8){
                 return true;
+            }else{
+                return false;
             }
+
+
         }else{
             return false;
         }

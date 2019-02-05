@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
@@ -75,6 +76,9 @@ public class LectorFragment extends Fragment  {
             // A choice was made, so get the choice.
             centrosAlmacen = getArguments().getParcelable("centroOrigen");
             transportador = getArguments().getParcelable("transportador");
+            TextView mensajeLectura = (TextView) v.findViewById(R.id.tvLectorMensajes);
+            mensajeLectura.setText("Cargando Vehículo: "+ transportador.getPlaca());
+
             // Check the radio button choice.
         }
 

@@ -102,7 +102,7 @@ public class TransporteActivity extends AppCompatActivity {
                 String textoLeido  = s.toString();
                 if(!textoLeido.equals("") && !textoLeido.isEmpty() && textoLeido != null) {
                     procesaLecturaTransporte(textoLeido);
-                    goLecturaActivity();
+                    goLecturaActivity(textoLeido);
                     CharSequence text = "Etiqueta Leida";
                     int duration = Toast.LENGTH_SHORT;
 
@@ -124,9 +124,9 @@ public class TransporteActivity extends AppCompatActivity {
      * este objeto y nuevamente la información de la primera actividad CentrosActivity para que sea leida por la siguiente acitividad
      * del flujo llamada {@link LecturaActivity}
      */
-    public void goLecturaActivity(){
+    public void goLecturaActivity(String texto){
         Intent i = new Intent(contexto, LecturaActivity.class);
-        if (validaCampos()) {
+        if (validaCampos(texto)) {
             Transportador transportador = new Transportador();
             transportador.setCodigo(getCodigoTransportador());
             transportador.setNombre(getNombreTransportador());
@@ -150,6 +150,7 @@ public class TransporteActivity extends AppCompatActivity {
     public void procesaLecturaTransporte(String lectura){
         if (lectura != null) {
             StringTokenizer token = new StringTokenizer(lectura, "#");
+            int númeroTokens = token.countTokens();
             String fragmento = "";
             while (token.hasMoreTokens()) {
                 // Lee nombre código Transportador
@@ -179,9 +180,13 @@ public class TransporteActivity extends AppCompatActivity {
      * @return  true si el QR es correcto, falso si no lo es.
      */
 
-    private boolean validaCampos(){
-        if((getCodigoTransportador().equals("")|| getNombreTransportador() == null)){
-            return false;
+    private boolean validaCampos(String lectura){
+       if (lectura != null) {
+            StringTokenizer token = new StringTokenizer(lectura, "#");
+            int númeroTokens = token.countTokens();
+            if(númeroTokens>3){
+                return false;
+            }
         }
 
         return true;
