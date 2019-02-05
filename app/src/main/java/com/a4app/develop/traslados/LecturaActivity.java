@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.a4app.develop.traslados.bdatos.BdManager;
 import com.a4app.develop.traslados.modelo.CentrosAlmacen;
@@ -191,11 +192,15 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
        // The user selected the headline of an article from the HeadlinesFragment
         // Capture the article fragment from the activity layout
         EnvioFragment envioFragment = (EnvioFragment) mSectionsPagerAdapter.getItem(1);
-       if(!envioFragment.PasaLote(lote)) {
-           Snackbar.make(mViewPager, "Lote ya cargado", Snackbar.LENGTH_LONG)
-                   .setAction("Action", null).show();
-       }
-
+        if(!lote.getCentro_destino().equalsIgnoreCase(centrosAlmacen.getCentroDestino())){
+            Snackbar.make(mViewPager, "Este lote se dirige a otra planta", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }else {
+            if (!envioFragment.PasaLote(lote)) {
+                Snackbar.make(mViewPager, "Lote ya cargado", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        }
     }
 
     /**
@@ -357,34 +362,61 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
 
     }
-    private class AsyncTaskOnSaveInstace extends AsyncTask<Void, Void, Void> {
+    private class AsyncTaskOnSaveInstace extends AsyncTask<Void, Boolean, Boolean> {
 
         private String resp;
         ProgressDialog progressDialog;
         boolean tieneDAtos = true;
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
            BdManager db = BdManager.getDatabase(contexto);
-            db.clearAllTables();
-            for (Lote lot:lotess
-            ) {
-                db.bdaoLote().addLotes(lot);
+           // db.clearAllTables();
+            boolean mismoCentro = false;
+            boolean vacio = false;
 
+            ArrayList<Lote> lotesBd = (ArrayList<Lote>) db.bdaoLote().getLotes();
+            if(lotesBd.isEmpty()){
+                vacio = true;
+                for (Lote lot:lotess) {
+                        db.bdaoLote().addLotes(lot);
+                }
+                db.bdaoCentroAlmacen().addCentroAlmacen(centrosAlmacen);
+                db.bdaoTransportador().addTransportador(transportador);
+                mismoCentro = true;
+            }else{
+                for (Lote lot:lotess
+                ) {
+                    mismoCentro = false;
+                    for(Lote lotbd: lotesBd){
+                        if( lot.getCentro_destino().equalsIgnoreCase(lotbd.getCentro_destino())){
+                            int a = db.bdaoLote().exiteLote(lot.getNumLote());
+                            if(db.bdaoLote().exiteLote(lot.getNumLote())==0){
+                                db.bdaoLote().addLotes(lot);
+                            }
+                            mismoCentro = true;
+                            break;
+                        }
+                    }
+
+
+                }
             }
-            db.bdaoCentroAlmacen().addCentroAlmacen(centrosAlmacen);
-            db.bdaoTransportador().addTransportador(transportador);
-
-            return null;
+            return mismoCentro;
         }
 
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Boolean result) {
             // execution of result of Long time consuming operation
-            Log.i("HiloCentros","Ok");
-            Intent a = new Intent(contexto, CentrosActivity.class);
-            startActivity(a);
+            if(result) {
+                Log.i("HiloCentros", "Ok");
+                Intent a = new Intent(contexto, CentrosActivity.class);
+                startActivity(a);
+            }else{
+                Toast toast = Toast.makeText(contexto, "No se puede pausar este transporte de otra planta", Toast.LENGTH_LONG);
+                toast.show();
+            }
 
         }
 
@@ -396,7 +428,7 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
 
 
         @Override
-        protected void onProgressUpdate(Void... text) {
+        protected void onProgressUpdate(Boolean... text) {
 
 
 
@@ -461,6 +493,8 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
             populateViewPager();
         }
     }
+
+
 
 
 }

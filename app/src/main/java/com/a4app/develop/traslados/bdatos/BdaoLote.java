@@ -22,6 +22,10 @@ public interface BdaoLote {
    @Query("SELECT * FROM lote")
     public List<Lote> getLotes();
 
+    @Query("SELECT COUNT(numLote) FROM lote WHERE numLote = :numerolote")
+    public int exiteLote(String numerolote);
+
+
     /**
      * Inserta un registro en la tabla lote
      * @param lote

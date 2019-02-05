@@ -97,6 +97,8 @@ public class EnvioFragment extends Fragment {
      */
    private ProgressBar progressBar;
 
+    private Button btonTransportar;
+
     public EnvioFragment() {
         // Required empty public constructor
     }
@@ -150,7 +152,7 @@ public class EnvioFragment extends Fragment {
         //tableLayout = (TableLayout) vista.findViewById(R.id.tablaRollo);
         rvRollos = (RecyclerView) vista.findViewById(R.id.rvTablaRollos);
         rolloLayout = (LinearLayout) vista.findViewById(R.id.tablaRollosLayaout);
-        Button btonTransportar = (Button) vista.findViewById(R.id.btnTransportar);
+        btonTransportar = (Button) vista.findViewById(R.id.btnTransportar);
         btonTransportar.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -165,12 +167,13 @@ public class EnvioFragment extends Fragment {
                             .writeTimeout(3, TimeUnit.MINUTES)
                             .build();
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://10.1.2.102:8080/apiTraslados/apiTraslados/")
+                            .baseUrl("http://10.1.2.20:8080/apiTraslados/apiTraslados/")
                             .client(okHttpClient)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                     RollosService rollosService = retrofit.create(RollosService.class);
                     progressBar.setVisibility(View.VISIBLE);
+                    btonTransportar.setEnabled(false);
                    Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
                    // Tesxprueba
                     call.enqueue(new Callback<List<Respuesta>>() {
@@ -186,6 +189,7 @@ public class EnvioFragment extends Fragment {
                                 String texto = getArguments().getString(ARG_PARAM2);
                                 if (texto.equalsIgnoreCase("CentrosActivity.class")) {
                                     progressBar.setVisibility(View.GONE);
+
                                     Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
                                     intent.putParcelableArrayListExtra("respuestas", respuestas);
                                     intent.putExtra("cerrarBdatos",true);
@@ -203,6 +207,7 @@ public class EnvioFragment extends Fragment {
                                 intent.putParcelableArrayListExtra("respuestas", respuestas);
                                 startActivity(intent);
                             }
+                            btonTransportar.setEnabled(true);
 
                         }
 
@@ -212,6 +217,7 @@ public class EnvioFragment extends Fragment {
 
                             Toast toast = Toast.makeText(contexto, "Error conexión a SAP", Toast.LENGTH_LONG);
                             toast.show();
+                            btonTransportar.setEnabled(true);
                         }
                     });
                 }else{
