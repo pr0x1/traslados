@@ -213,10 +213,15 @@ public class EnvioFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<List<Respuesta>> call, Throwable t) {
-                            Log.i("ApiRestfull", t.getMessage());
-
-                            Toast toast = Toast.makeText(contexto, "Error conexión a SAP", Toast.LENGTH_LONG);
+                            Toast toast = Toast.makeText(contexto, t.toString(), Toast.LENGTH_LONG);
                             toast.show();
+                            progressBar.setVisibility(View.GONE);
+                            Intent intent = new Intent(vista.getContext(), MensajesActivity.class);
+                            Respuesta respuesta = new Respuesta("E",t.toString());
+                            ArrayList<Respuesta> respuestas = new ArrayList<>();
+                            respuestas.add(respuesta);
+                            intent.putParcelableArrayListExtra("respuestas", respuestas);
+                            startActivity(intent);
                             btonTransportar.setEnabled(true);
                         }
                     });
