@@ -167,6 +167,7 @@ public class EnvioFragment extends Fragment {
                             .writeTimeout(3, TimeUnit.MINUTES)
                             .build();
                     Retrofit retrofit = new Retrofit.Builder()
+                            //.baseUrl("http://10.36.1.14:8040/apiTraslados/apiTraslados/") sonda
                             .baseUrl("http://10.1.2.20:8080/apiTraslados/apiTraslados/")
                             .client(okHttpClient)
                             .addConverterFactory(GsonConverterFactory.create())
@@ -245,6 +246,7 @@ public class EnvioFragment extends Fragment {
         rvRollos.setLayoutManager(new LinearLayoutManager(contexto));
         enableSwipeToDeleteAndUndo();
         calculaKg();
+        cantidadRollos();
         return vista;
     }
 
@@ -316,6 +318,7 @@ public class EnvioFragment extends Fragment {
 
             adapter.addItem(lote, 0);
             calculaKg();
+            cantidadRollos();
           mCallback.onLotesActuales(lotes);
 
 
@@ -338,6 +341,16 @@ public class EnvioFragment extends Fragment {
     }
 
     /**
+     * Informa la cantidad de rollos en la lista
+     */
+
+    public void cantidadRollos(){
+        TextView cantiRollos = (TextView) vista.findViewById(R.id.tvCantRollos);
+        cantiRollos.setText(String.valueOf(lotes.size()));
+
+    }
+
+    /**
      * se crea un objeto {@link SwipeToDeleteCallback} que controla el gesto de deslizar el dedo de izquierda a derecha sobre la celda a borrar
      * con ellos se borrar el lote al que se le realizó el gesto
      */
@@ -353,6 +366,7 @@ public class EnvioFragment extends Fragment {
 
                 adapter.removeItem(position);
                 calculaKg();
+                cantidadRollos();
                 mCallback.onLotesActuales(lotes);
 
 
@@ -365,6 +379,7 @@ public class EnvioFragment extends Fragment {
                         adapter.restoreItem(item, position);
                         rvRollos.scrollToPosition(position);
                         calculaKg();
+                        cantidadRollos();
                         mCallback.onLotesActuales(lotes);
                     }
                 });
