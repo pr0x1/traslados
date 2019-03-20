@@ -193,8 +193,16 @@ public class LecturaActivity extends AppCompatActivity implements ILectorActivit
         // Capture the article fragment from the activity layout
         EnvioFragment envioFragment = (EnvioFragment) mSectionsPagerAdapter.getItem(1);
         if(!lote.getCentro_destino().equalsIgnoreCase(centrosAlmacen.getCentroDestino())){
-            Snackbar.make(mViewPager, "Este lote se dirige a otra planta", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            if(!centrosAlmacen.getCentroDestino().equals("1000")) {
+                Snackbar.make(mViewPager, "Este lote se dirige a otra planta", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }else{
+                if (!envioFragment.PasaLote(lote)) {
+                    Snackbar.make(mViewPager, "Lote ya cargado", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+
         }else {
             if (!envioFragment.PasaLote(lote)) {
                 Snackbar.make(mViewPager, "Lote ya cargado", Snackbar.LENGTH_LONG)
