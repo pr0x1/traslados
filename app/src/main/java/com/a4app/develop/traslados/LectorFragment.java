@@ -169,8 +169,8 @@ public class LectorFragment extends Fragment  {
                 if(token.hasMoreTokens()){
                     texto = token.nextToken();
 				}
-                //lote.setCentro_destino(centrosAlmacen.getCentroDestino());
-                lote.setCentro_destino(texto);
+                lote.setCentro_destino(centrosAlmacen.getCentroDestino());
+                //lote.setCentro_destino(texto);
                 Log.i(Tag,"Centro origen"+lote.getCentro_destino());
 
                 // Lee Número de pedido
