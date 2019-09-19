@@ -78,6 +78,10 @@ public class LectorFragment extends Fragment  {
             transportador = getArguments().getParcelable("transportador");
             TextView mensajeLectura = (TextView) v.findViewById(R.id.tvLectorMensajes);
             mensajeLectura.setText("Cargando Vehículo: "+ transportador.getPlaca());
+            TextView mensajeLecturaDestino = (TextView) v.findViewById(R.id.tvLectorMensajesDestino);
+            mensajeLecturaDestino.setText("Destino: "+ centrosAlmacen.getDesCentroDestino());
+            TextView mensajeLecturaTransportador = (TextView) v.findViewById(R.id.tvLectorMensajesTransportador);
+            mensajeLecturaTransportador.setText("Emp.Transporte: "+ transportador.getNombre());
 
             // Check the radio button choice.
         }
@@ -169,7 +173,12 @@ public class LectorFragment extends Fragment  {
                 if(token.hasMoreTokens()){
                     texto = token.nextToken();
 				}
-                lote.setCentro_destino(centrosAlmacen.getCentroDestino());
+                //lote.setCentro_destino(centrosAlmacen.getCentroDestino());
+                if(centrosAlmacen.getCentroDestino().equals("1000")){
+                    lote.setCentro_destino(centrosAlmacen.getCentroDestino());
+                }else{
+                    lote.setCentro_destino(texto);
+                }
                 //lote.setCentro_destino(texto);
                 Log.i(Tag,"Centro origen"+lote.getCentro_destino());
 
