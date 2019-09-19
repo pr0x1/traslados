@@ -82,8 +82,6 @@ public class LectorFragment extends Fragment  {
             mensajeLecturaDestino.setText("Destino: "+ centrosAlmacen.getDesCentroDestino());
             TextView mensajeLecturaTransportador = (TextView) v.findViewById(R.id.tvLectorMensajesTransportador);
             mensajeLecturaTransportador.setText("Emp.Transporte: "+ transportador.getNombre());
-
-            // Check the radio button choice.
         }
 
         textEtiqueta.addTextChangedListener(new TextWatcher() {
