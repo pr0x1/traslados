@@ -168,8 +168,8 @@ public class EnvioFragment extends Fragment {
 
                             .build();
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://10.36.1.14:8040/apiTraslados/apiTraslados/") //sonda
-                            //.baseUrl("http://10.13.2.28:8040/apiTraslados/apiTraslados/") //Nuevo PRD
+                            //.baseUrl("http://10.36.1.14:8040/apiTraslados/apiTraslados/") //sonda
+                            .baseUrl("http://10.13.2.28:8040/apiTraslados/apiTraslados/") //Nuevo PRD
                             //.baseUrl("http://10.1.2.58:8080/apiTraslados/apiTraslados/") //desarrollo
                             .client(okHttpClient)
                             .addConverterFactory(GsonConverterFactory.create())

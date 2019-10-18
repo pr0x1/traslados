@@ -262,13 +262,14 @@ public class LectorFragment extends Fragment  {
                 // Lee Unidad de medida
                 if(token.hasMoreTokens()){
                     texto = token.nextToken();
+
                     if (texto.equals("*")) {
-                        lote.setUnidad_medida("");
+                        lote.setUnidad_medida("KG");
                     } else {
                         lote.setUnidad_medida(texto);
                     }
                 }else{
-                    lote.setUnidad_medida("");
+                    lote.setUnidad_medida("KG");
                 }
                 Log.i(Tag,"UM: " +texto);
                 // Lee Cliente
