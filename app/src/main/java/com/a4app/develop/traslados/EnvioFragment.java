@@ -40,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
+/*pruebas git*/
 
 /**
  * Clase que hereda de {@link Fragment} y representa el frament que envía la etiqueta del rollo.
