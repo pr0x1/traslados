@@ -172,7 +172,11 @@ public class LectorFragment extends Fragment  {
                     texto = token.nextToken();
 				}
                 //lote.setCentro_destino(centrosAlmacen.getCentroDestino());
-                if(centrosAlmacen.getCentroDestino().equals("1000")){
+                if(centrosAlmacen.getCentroDestino().equals("1000")
+                || centrosAlmacen.getCentroDestino().equals("1111")
+                || centrosAlmacen.getCentroDestino().equals("2222")
+                || centrosAlmacen.getCentroDestino().equals("8888")
+                || centrosAlmacen.getCentroDestino().equals("8889")){
                     lote.setCentro_destino(centrosAlmacen.getCentroDestino());
                 }else{
                     lote.setCentro_destino(texto);

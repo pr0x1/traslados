@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,8 +168,8 @@ public class EnvioFragment extends Fragment {
                             .build();
                     Retrofit retrofit = new Retrofit.Builder()
                             //.baseUrl("http://10.36.1.14:8040/apiTraslados/apiTraslados/") //sonda
-                            .baseUrl("http://10.13.2.28:8040/apiTraslados/apiTraslados/") //Nuevo PRD
-                            //.baseUrl("http://10.1.2.58:8080/apiTraslados/apiTraslados/") //desarrollo
+                            //.baseUrl("http://10.13.2.28:8040/apiTraslados/apiTraslados/") //Nuevo PRD
+                            .baseUrl("http://10.10.0.212:8080/apiTraslados/apiTraslados/") // desarrollo
                             .client(okHttpClient)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
@@ -178,7 +177,7 @@ public class EnvioFragment extends Fragment {
                     progressBar.setVisibility(View.VISIBLE);
                     btonTransportar.setEnabled(false);
                    Call<List<Respuesta>> call = rollosService.enviaLotes(lotes);
-                   // Tesxprueba
+
                     call.enqueue(new Callback<List<Respuesta>>() {
                         @Override
                         public void onResponse(Call<List<Respuesta>> call, Response<List<Respuesta>> response) {
